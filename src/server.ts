@@ -1,6 +1,9 @@
 import express, { Express, Request, Response } from 'express'
 import bodyParser from 'body-parser'
 import mongoose from 'mongoose'
+import 'dotenv/config'
+
+import { getMongoUrl } from 'helpers'
 
 const server: Express = express()
 
@@ -14,10 +17,8 @@ server.use((_: Request, res: Response) => {
 
 const startServer = async () => {
   try {
-    await mongoose.connect(
-      'mongodb+srv://sdomianidze:4GMX680AWm6LMtQS@cluster0.8bito.mongodb.net/main?retryWrites=true&w=majority'
-    )
-    server.listen(8080)
+    await mongoose.connect(getMongoUrl())
+    server.listen(process.env.SEVER_PORT)
   } catch (err) {
     console.error(err)
   }

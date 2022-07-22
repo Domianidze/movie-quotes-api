@@ -4,5 +4,8 @@
 # typescript
 build
 
+# env
+.env
+
 # vscode
 .vscode
