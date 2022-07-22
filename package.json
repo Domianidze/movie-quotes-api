@@ -15,5 +15,14 @@
   "bugs": {
     "url": "https://github.com/RedberryInternship/movie-quotes-api-Domianidze/issues"
   },
-  "homepage": "https://github.com/RedberryInternship/movie-quotes-api-Domianidze#readme"
+  "homepage": "https://github.com/RedberryInternship/movie-quotes-api-Domianidze#readme",
+  "devDependencies": {
+    "eslint": "8.20.0",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-prettier": "4.2.1",
+    "install": "0.13.0",
+    "npm": "8.15.0",
+    "prettier": "2.7.1"
+  }
 }
