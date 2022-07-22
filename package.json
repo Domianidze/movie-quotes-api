@@ -2,9 +2,12 @@
   "name": "movie-quotes-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node build/server.js",
+    "build:watch": "babel src --out-dir build --extensions .ts --copy-files --watch",
+    "build:prod": "babel src --out-dir build --extensions .ts --copy-files --minified",
+    "dev": "concurrently \"npm run build:watch\" \"nodemon build/server.js\""
   },
   "repository": {
     "type": "git",
@@ -17,12 +20,20 @@
   },
   "homepage": "https://github.com/RedberryInternship/movie-quotes-api-Domianidze#readme",
   "devDependencies": {
+    "@babel/cli": "^7.18.9",
+    "@babel/core": "^7.18.9",
+    "@babel/preset-env": "^7.18.9",
+    "@babel/preset-typescript": "^7.18.6",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "concurrently": "^7.3.0",
     "eslint": "8.20.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-prettier": "4.2.1",
-    "install": "0.13.0",
-    "npm": "8.15.0",
-    "prettier": "2.7.1"
+    "install": "^0.13.0",
+    "nodemon": "^2.0.19",
+    "npm": "^8.15.0",
+    "prettier": "2.7.1",
+    "typescript": "^4.7.4"
   }
 }
