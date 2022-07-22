@@ -2,7 +2,7 @@
   "name": "movie-quotes-api",
   "version": "1.0.0",
   "description": "",
-  "main": "",
+  "main": "build/server.ts",
   "scripts": {
     "start": "node build/server.js",
     "build:watch": "babel src --out-dir build --extensions .ts --copy-files --watch",
@@ -24,6 +24,9 @@
     "@babel/core": "^7.18.9",
     "@babel/preset-env": "^7.18.9",
     "@babel/preset-typescript": "^7.18.6",
+    "@types/express": "^4.17.13",
+    "@typescript-eslint/eslint-plugin": "^5.30.7",
+    "@typescript-eslint/parser": "^5.30.7",
     "babel-plugin-module-resolver": "^4.1.0",
     "concurrently": "^7.3.0",
     "eslint": "8.20.0",
@@ -35,5 +38,10 @@
     "npm": "^8.15.0",
     "prettier": "2.7.1",
     "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "express": "^4.18.1",
+    "ts-node": "^10.9.1"
   }
 }
