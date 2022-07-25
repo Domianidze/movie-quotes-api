@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { Request, Response, NextFunction } from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
@@ -7,7 +7,11 @@ import signupSchema from 'schemas/signup-schema'
 import { sendConfirmAccountMail } from 'mail'
 import { ErrorType, JwtPayloadType } from 'types'
 
-export const signUp = async (req: Request, res: Response) => {
+export const signUp = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     await signupSchema.validateAsync(req.body)
 
@@ -68,17 +72,15 @@ export const signUp = async (req: Request, res: Response) => {
       message: 'Signed up successfully!',
     })
   } catch (err: any) {
-    if (!err.statusCode) {
-      err.statusCode = 500
-    }
-
-    res.status(err.statusCode).json({
-      message: err.message,
-    })
+    next(err)
   }
 }
 
-export const verifyAccount = async (req: Request, res: Response) => {
+export const verifyAccount = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     if (!process.env.EMAIL_SECRET) {
       throw new Error('JWT secret missing.')
@@ -113,12 +115,6 @@ export const verifyAccount = async (req: Request, res: Response) => {
       message: 'Account activated successfully!',
     })
   } catch (err: any) {
-    if (!err.statusCode) {
-      err.statusCode = 500
-    }
-
-    res.status(err.statusCode).json({
-      message: err.message,
-    })
+    next(err)
   }
 }

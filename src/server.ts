@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 import SwaggerUI from 'swagger-ui-express'
 import 'dotenv/config'
 
-import { swaggerMiddleware } from 'middleware'
+import { swaggerMiddleware, errorMiddleware } from 'middleware'
 import { authRoutes } from 'routes'
 import { getMongoUrl } from 'helpers'
 
@@ -15,6 +15,8 @@ server.use(bodyParser.json())
 server.use('/api-docs', SwaggerUI.serve, swaggerMiddleware())
 
 server.use(authRoutes)
+
+server.use(errorMiddleware)
 
 const startServer = async () => {
   try {
