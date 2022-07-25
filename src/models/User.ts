@@ -15,6 +15,10 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  confirmed: {
+    type: Boolean,
+    required: true,
+  },
 })
 
 const User = mongoose.model('User', userSchema)

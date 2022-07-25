@@ -8,3 +8,64 @@ servers:
     description: local server
   - url: 
     description: production server
+
+paths:
+  /signup:
+    post:
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            example:
+                username: testuser
+                email: testuser@gmail.com
+                password: test123,
+                redirectOnConfirm: http://localhost:3000/confirm-account,
+                language: en
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  required: true
+                email:
+                  type: string
+                  required: true
+                password:
+                  type: string
+                  required: true
+                redirectOnConfirm:
+                  type: string
+                  required: true
+                language:
+                  type: string
+      responses:
+        '201':
+          description: Signed up successfully!
+          content:
+            application/json:
+              example:
+                message: Registered successfully!
+                userId: '62a48d48d2c36b37241a8f5b'
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+                  userId:
+                    type: string
+                    required: true
+        '422':
+          description: Username or Email is already taken!
+          content:
+            application/json:
+              example:
+                message: Username or Email is already taken!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
