@@ -3,11 +3,14 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 import { User } from 'models'
-import { ErrorType, JwtPayloadType } from 'types'
+import signupSchema from 'schemas/signup-schema'
 import { sendConfirmAccountMail } from 'mail'
+import { ErrorType, JwtPayloadType } from 'types'
 
 export const signUp = async (req: Request, res: Response) => {
   try {
+    await signupSchema.validateAsync(req.body)
+
     const existingUsername = await User.findOne({
       username: req.body.username,
     })
@@ -34,7 +37,7 @@ export const signUp = async (req: Request, res: Response) => {
       username: req.body.username,
       email: req.body.email,
       password: hashedPassword,
-      confirmed: false,
+      activated: false,
     })
 
     const response = await user.save()
@@ -75,7 +78,7 @@ export const signUp = async (req: Request, res: Response) => {
   }
 }
 
-export const confirmAccount = async (req: Request, res: Response) => {
+export const verifyAccount = async (req: Request, res: Response) => {
   try {
     if (!process.env.EMAIL_SECRET) {
       throw new Error('JWT secret missing.')
@@ -92,7 +95,7 @@ export const confirmAccount = async (req: Request, res: Response) => {
       throw error
     }
 
-    const user = await User.findOne({ _id: id })
+    const user = await User.findOneAndUpdate({ activated: true }, { _id: id })
 
     if (!user) {
       const error: ErrorType = new Error('Account does not exist.')
@@ -100,16 +103,14 @@ export const confirmAccount = async (req: Request, res: Response) => {
       throw error
     }
 
-    if (user.confirmed) {
-      const error: ErrorType = new Error('Account is already confirmed.')
+    if (user.activated) {
+      const error: ErrorType = new Error('Account is already activated.')
       error.statusCode = 409
       throw error
     }
 
-    await user.update({ confirmed: true })
-
     res.status(200).json({
-      message: 'Account confirmed successfully!',
+      message: 'Account activated successfully!',
     })
   } catch (err: any) {
     if (!err.statusCode) {

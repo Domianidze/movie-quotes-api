@@ -65,7 +65,7 @@ paths:
                   message:
                     type: string
                     required: true
-  /confirm-account:
+  /verify-account:
     post:
       tags:
         - Auth
@@ -82,11 +82,24 @@ paths:
                   required: true
       responses:
         '200':
-          description: Account confirmed successfully!
+          description: Account verified successfully!
           content:
             application/json:
               example:
-                message: Account confirmed successfully!
+                message: Account verified successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+      responses:
+        '409':
+          description: Account is already verified.
+          content:
+            application/json:
+              example:
+                message: Account is already verified.
               schema:
                 type: object
                 properties:
