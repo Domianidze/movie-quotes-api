@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 import { User } from 'models'
-import { ErrorType } from 'types'
+import { ErrorType, JwtPayloadType } from 'types'
 import { sendConfirmAccountMail } from 'mail'
 
 export const signUp = async (req: Request, res: Response) => {
@@ -39,17 +39,17 @@ export const signUp = async (req: Request, res: Response) => {
 
     const response = await user.save()
 
-    if (!process.env.JWT_SECRET) {
+    if (!process.env.EMAIL_SECRET) {
       throw new Error('JWT secret missing.')
     }
 
     const confirmToken = jwt.sign(
       {
-        email: response.email,
+        id: response._id,
       },
-      process.env.JWT_SECRET,
+      process.env.EMAIL_SECRET,
       {
-        expiresIn: '1d',
+        expiresIn: process.env.EMAIL_EXPIRES_IN,
       }
     )
 
@@ -63,7 +63,53 @@ export const signUp = async (req: Request, res: Response) => {
 
     res.status(201).json({
       message: 'Signed up successfully!',
-      userId: response._id,
+    })
+  } catch (err: any) {
+    if (!err.statusCode) {
+      err.statusCode = 500
+    }
+
+    res.status(err.statusCode).json({
+      message: err.message,
+    })
+  }
+}
+
+export const confirmAccount = async (req: Request, res: Response) => {
+  try {
+    if (!process.env.EMAIL_SECRET) {
+      throw new Error('JWT secret missing.')
+    }
+
+    const { id } = jwt.verify(
+      req.body.token,
+      process.env.EMAIL_SECRET
+    ) as JwtPayloadType
+
+    if (!id) {
+      const error: ErrorType = new Error('Invalid token.')
+      error.statusCode = 422
+      throw error
+    }
+
+    const user = await User.findOne({ _id: id })
+
+    if (!user) {
+      const error: ErrorType = new Error('Account does not exist.')
+      error.statusCode = 404
+      throw error
+    }
+
+    if (user.confirmed) {
+      const error: ErrorType = new Error('Account is already confirmed.')
+      error.statusCode = 409
+      throw error
+    }
+
+    await user.update({ confirmed: true })
+
+    res.status(200).json({
+      message: 'Account confirmed successfully!',
     })
   } catch (err: any) {
     if (!err.statusCode) {

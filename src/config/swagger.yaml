@@ -20,8 +20,8 @@ paths:
             example:
                 username: testuser
                 email: testuser@gmail.com
-                password: test123,
-                redirectOnConfirm: http://localhost:3000/confirm-account,
+                password: test123
+                redirectOnConfirm: http://localhost:3000/confirm-account
                 language: en
             schema:
               type: object
@@ -46,23 +46,59 @@ paths:
           content:
             application/json:
               example:
-                message: Registered successfully!
-                userId: '62a48d48d2c36b37241a8f5b'
+                message: Signed up successfully!
               schema:
                 type: object
                 properties:
                   message:
                     type: string
                     required: true
-                  userId:
-                    type: string
-                    required: true
         '422':
-          description: Username or Email is already taken!
+          description: Username or Email is already taken.
           content:
             application/json:
               example:
-                message: Username or Email is already taken!
+                message: Username or Email is already taken.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+  /confirm-account:
+    post:
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            example:
+                token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyZGVjYzZmMjYxMDZhNTEwZWQyNjg0ZSIsImlhdCI6MTY1ODc2ODQ5NSwiZXhwIjoxNjU4NzcyMDk1fQ.x8MHRNLbBOJgHZ1ORLfsAkOUQ1ZhULe4fFk5dCoCnJ4
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  required: true
+      responses:
+        '200':
+          description: Account confirmed successfully!
+          content:
+            application/json:
+              example:
+                message: Account confirmed successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '422':
+          description: Invalid token.
+          content:
+            application/json:
+              example:
+                message: Invalid token.
               schema:
                 type: object
                 properties:

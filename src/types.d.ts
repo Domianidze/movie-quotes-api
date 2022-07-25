@@ -4,3 +4,7 @@ export interface ErrorType {
   stack?: string
   statusCode?: number
 }
+
+interface JwtPayloadType {
+  id?: string
+}
