@@ -76,6 +76,69 @@ export const signUp = async (
   }
 }
 
+export const logIn = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const loadedUser =
+      (await User.findOne({ username: req.body.user })) ||
+      (await User.findOne({ email: req.body.user }))
+
+    if (!loadedUser) {
+      const error: ErrorType = new Error('Invalid credentials.')
+      error.statusCode = 422
+      throw error
+    }
+
+    const correctPassword = await bcrypt.compare(
+      req.body.password,
+      loadedUser.password
+    )
+
+    if (!correctPassword) {
+      const error: ErrorType = new Error('Invalid credentials.')
+      error.statusCode = 422
+      throw error
+    }
+
+    if (!loadedUser.activated) {
+      const error: ErrorType = new Error('Account is not activated.')
+      error.statusCode = 403
+      throw error
+    }
+
+    if (!process.env.SESSION_SECRET) {
+      const error: ErrorType = new Error('JWT secret missing.')
+      error.statusCode = 404
+      throw error
+    }
+
+    const expiresIn = req.body.rememberMe
+      ? '365d'
+      : process.env.SESSION_EXPIRES_IN
+
+    const token = jwt.sign(
+      {
+        id: loadedUser._id,
+      },
+      process.env.SESSION_SECRET,
+      {
+        expiresIn,
+      }
+    )
+
+    res.status(200).json({
+      token,
+      id: loadedUser.id.toString(),
+      expiresIn,
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
 export const verifyAccount = async (
   req: Request,
   res: Response,

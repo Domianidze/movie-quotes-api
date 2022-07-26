@@ -20,7 +20,7 @@ paths:
             example:
                 username: testuser
                 email: testuser@gmail.com
-                password: test123
+                password: testuser123
                 redirectOnConfirm: http://localhost:3000/confirm-account
                 language: en
             schema:
@@ -59,6 +59,62 @@ paths:
             application/json:
               example:
                 message: Username or Email is already taken.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+  /login:
+    post:
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            example:
+                user: testuser
+                password: testuser123
+                rememberMe: false
+            schema:
+              type: object
+              properties:
+                user:
+                  type: string
+                  required: true
+                password:
+                  type: string
+                  required: true
+                rememberMe:
+                  type: boolean
+                  required: true
+      responses:
+        '200':
+          description: Logged in successfully!
+          content:
+            application/json:
+              example:
+                token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJ1c2VySWQiOiI2MmE0OGQ0OGQyYzM2YjM3MjQxYThmNWIiLCJpYXQiOjE2NTUyMzIzMjQsImV4cCI6MTY1NTIzNTkyNH0.VG9OmL4PLbeR2oGMTmhAFd09Sn4OTmaC6T9sXiwWXdA
+                id: '62a48d48d2c36b37241a8f5b'
+                expiresIn: 1h
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    required: true
+                  id:
+                    type: string
+                    required: true
+                  expiresIn:
+                    type: string
+                    required: true
+        '422':
+          description: Invalid credentials.
+          content:
+            application/json:
+              example:
+                message: Invalid credentials.
               schema:
                 type: object
                 properties:
