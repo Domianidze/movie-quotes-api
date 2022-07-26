@@ -3,8 +3,8 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 import { User } from 'models'
-import { signUpSchema, logInSchema, resendVerifySchema } from 'schemas'
-import { sendConfirmAccountMail } from 'mail'
+import { signUpSchema, logInSchema, sendEmailSchema } from 'schemas'
+import { sendVerifyAccountEmail } from 'mail'
 import { ErrorType, JwtPayloadType } from 'types'
 
 export const signUp = async (
@@ -60,7 +60,7 @@ export const signUp = async (
       }
     )
 
-    await sendConfirmAccountMail(
+    await sendVerifyAccountEmail(
       response.email,
       confirmToken,
       response.username,
@@ -165,7 +165,7 @@ export const verifyAccount = async (
     const user = await User.findOneAndUpdate({ activated: true }, { _id: id })
 
     if (!user) {
-      const error: ErrorType = new Error('Account does not exist.')
+      const error: ErrorType = new Error('Account not found.')
       error.statusCode = 404
       throw error
     }
@@ -190,7 +190,7 @@ export const resendVerify = async (
   next: NextFunction
 ) => {
   try {
-    await resendVerifySchema.validateAsync(req.body)
+    await sendEmailSchema.validateAsync(req.body)
 
     const loadedUser =
       (await User.findOne({ username: req.body.user })) ||
@@ -222,7 +222,7 @@ export const resendVerify = async (
       }
     )
 
-    await sendConfirmAccountMail(
+    await sendVerifyAccountEmail(
       loadedUser.email,
       confirmToken,
       loadedUser.username,
@@ -231,7 +231,7 @@ export const resendVerify = async (
     )
 
     res.status(200).json({
-      message: 'Verify email sent!',
+      message: 'Account verify email sent!',
     })
   } catch (err: any) {
     next(err)
