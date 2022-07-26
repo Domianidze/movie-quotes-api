@@ -197,11 +197,11 @@ paths:
                   type: string
       responses:
         '200':
-          description: Account verified successfully!
+          description: Account verify email sent!
           content:
             application/json:
               example:
-                message: Account verified successfully!
+                message: Account verify email sent!
               schema:
                 type: object
                 properties:
@@ -226,6 +226,65 @@ paths:
             application/json:
               example:
                 message: Account is already verified.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '422':
+          description: Invalid token.
+          content:
+            application/json:
+              example:
+                message: Invalid token.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+  /password/send-recovery-link:
+    post:
+      tags:
+        - Password Recovery
+      requestBody:
+        content:
+          application/json:
+            example:
+                user: testuser@gmail.com
+                redirectOnConfirm: http://localhost:3000/confirm-account
+                language: en
+            schema:
+              type: object
+              properties:
+                user:
+                  type: string
+                  required: true
+                redirectOnConfirm:
+                  type: string
+                  required: true
+                language:
+                  type: string
+      responses:
+        '200':
+          description: Password recovery email sent!
+          content:
+            application/json:
+              example:
+                message: Password recovery email sent!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: Account not found.
+          content:
+            application/json:
+              example:
+                message: Account not found.
               schema:
                 type: object
                 properties:

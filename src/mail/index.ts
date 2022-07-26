@@ -25,7 +25,7 @@ const sendMail = (
   return gmailTransport.sendMail(options)
 }
 
-export const sendConfirmAccountMail = async (
+export const sendVerifyAccountEmail = async (
   to: string,
   token: string,
   username: string,
@@ -39,16 +39,45 @@ export const sendConfirmAccountMail = async (
 
   const attachments = [
     {
-      filename: 'confirm-account-icon',
-      path: path.join(`${__dirname}/views/icons/confirm-account.png`),
-      cid: 'confirm-account-icon',
+      filename: 'email-icon',
+      path: path.join(`${__dirname}/views/icons/email-icon.png`),
+      cid: 'email-icon',
     },
   ]
 
   return sendMail(
     to,
-    'Confirm Account',
-    `confirm-account-${locale || 'en'}`,
+    'Verify Account',
+    `verify-account-${locale || 'en'}`,
+    context,
+    attachments
+  )
+}
+
+export const sendPasswordRecoveryEmail = async (
+  to: string,
+  token: string,
+  username: string,
+  backLink: string,
+  locale: string
+) => {
+  const context = {
+    username,
+    link: `${backLink}/${token}`,
+  }
+
+  const attachments = [
+    {
+      filename: 'email-icon',
+      path: path.join(`${__dirname}/views/icons/email-icon.png`),
+      cid: 'email-icon',
+    },
+  ]
+
+  return sendMail(
+    to,
+    'Recover Password',
+    `recover-password-${locale || 'en'}`,
     context,
     attachments
   )

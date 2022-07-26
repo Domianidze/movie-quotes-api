@@ -5,7 +5,7 @@ import SwaggerUI from 'swagger-ui-express'
 import 'dotenv/config'
 
 import { swaggerMiddleware, errorMiddleware } from 'middleware'
-import { authRoutes } from 'routes'
+import { authRoutes, passwordRecoveryRoutes } from 'routes'
 import { getMongoUrl } from 'helpers'
 
 const server: Express = express()
@@ -15,6 +15,8 @@ server.use(bodyParser.json())
 server.use('/api-docs', SwaggerUI.serve, swaggerMiddleware())
 
 server.use(authRoutes)
+
+server.use('/password', passwordRecoveryRoutes)
 
 server.use(errorMiddleware)
 
