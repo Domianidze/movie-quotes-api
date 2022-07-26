@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 import { User } from 'models'
-import signupSchema from 'schemas/signup-schema'
+import { signUpSchema, logInSchema, resendVerifySchema } from 'schemas'
 import { sendConfirmAccountMail } from 'mail'
 import { ErrorType, JwtPayloadType } from 'types'
 
@@ -13,7 +13,7 @@ export const signUp = async (
   next: NextFunction
 ) => {
   try {
-    await signupSchema.validateAsync(req.body)
+    await signUpSchema.validateAsync(req.body)
 
     const existingUsername = await User.findOne({
       username: req.body.username,
@@ -82,6 +82,8 @@ export const logIn = async (
   next: NextFunction
 ) => {
   try {
+    await logInSchema.validateAsync(req.body)
+
     const loadedUser =
       (await User.findOne({ username: req.body.user })) ||
       (await User.findOne({ email: req.body.user }))
@@ -188,6 +190,8 @@ export const resendVerify = async (
   next: NextFunction
 ) => {
   try {
+    await resendVerifySchema.validateAsync(req.body)
+
     const loadedUser =
       (await User.findOne({ username: req.body.user })) ||
       (await User.findOne({ email: req.body.user }))
