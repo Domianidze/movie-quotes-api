@@ -149,6 +149,18 @@ paths:
                   message:
                     type: string
                     required: true
+        '404':
+          description: Account not found.
+          content:
+            application/json:
+              example:
+                message: Account not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
         '409':
           description: Account is already verified.
           content:
@@ -253,7 +265,7 @@ paths:
           application/json:
             example:
                 user: testuser@gmail.com
-                redirectOnConfirm: http://localhost:3000/confirm-account
+                redirectOnConfirm: http://localhost:3000/recover-password
                 language: en
             schema:
               type: object
@@ -285,6 +297,74 @@ paths:
             application/json:
               example:
                 message: Account not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '422':
+          description: Invalid token.
+          content:
+            application/json:
+              example:
+                message: Invalid token.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+  /password/recover:
+    post:
+      tags:
+        - Password Recovery
+      requestBody:
+        content:
+          application/json:
+            example:
+                token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyZGVjYzZmMjYxMDZhNTEwZWQyNjg0ZSIsImlhdCI6MTY1ODc2ODQ5NSwiZXhwIjoxNjU4NzcyMDk1fQ.x8MHRNLbBOJgHZ1ORLfsAkOUQ1ZhULe4fFk5dCoCnJ4
+                newPassword: testuser456
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  required: true
+                newPassword:
+                  type: string
+                  required: true
+      responses:
+        '200':
+          description: Password recovered successfully!
+          content:
+            application/json:
+              example:
+                message: Password recovered successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: Account not found.
+          content:
+            application/json:
+              example:
+                message: Account not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '409':
+          description: Same password.
+          content:
+            application/json:
+              example:
+                message: Same password.
               schema:
                 type: object
                 properties:
