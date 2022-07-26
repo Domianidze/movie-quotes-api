@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 import { User } from 'models'
-import signupSchema from 'schemas/signup-schema'
+import { signUpSchema, logInSchema, resendVerifySchema } from 'schemas'
 import { sendConfirmAccountMail } from 'mail'
 import { ErrorType, JwtPayloadType } from 'types'
 
@@ -13,7 +13,7 @@ export const signUp = async (
   next: NextFunction
 ) => {
   try {
-    await signupSchema.validateAsync(req.body)
+    await signUpSchema.validateAsync(req.body)
 
     const existingUsername = await User.findOne({
       username: req.body.username,
@@ -76,6 +76,71 @@ export const signUp = async (
   }
 }
 
+export const logIn = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    await logInSchema.validateAsync(req.body)
+
+    const loadedUser =
+      (await User.findOne({ username: req.body.user })) ||
+      (await User.findOne({ email: req.body.user }))
+
+    if (!loadedUser) {
+      const error: ErrorType = new Error('Invalid credentials.')
+      error.statusCode = 422
+      throw error
+    }
+
+    const correctPassword = await bcrypt.compare(
+      req.body.password,
+      loadedUser.password
+    )
+
+    if (!correctPassword) {
+      const error: ErrorType = new Error('Invalid credentials.')
+      error.statusCode = 422
+      throw error
+    }
+
+    if (!loadedUser.activated) {
+      const error: ErrorType = new Error('Account is not activated.')
+      error.statusCode = 403
+      throw error
+    }
+
+    if (!process.env.SESSION_SECRET) {
+      const error: ErrorType = new Error('JWT secret missing.')
+      error.statusCode = 404
+      throw error
+    }
+
+    const expiresIn = req.body.rememberMe
+      ? '365d'
+      : process.env.SESSION_EXPIRES_IN
+
+    const token = jwt.sign(
+      {
+        id: loadedUser._id,
+      },
+      process.env.SESSION_SECRET,
+      {
+        expiresIn,
+      }
+    )
+
+    res.status(200).json({
+      token,
+      id: loadedUser.id.toString(),
+      expiresIn,
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
 export const verifyAccount = async (
   req: Request,
   res: Response,
@@ -113,6 +178,60 @@ export const verifyAccount = async (
 
     res.status(200).json({
       message: 'Account activated successfully!',
+    })
+  } catch (err: any) {
+    next(err)
+  }
+}
+
+export const resendVerify = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    await resendVerifySchema.validateAsync(req.body)
+
+    const loadedUser =
+      (await User.findOne({ username: req.body.user })) ||
+      (await User.findOne({ email: req.body.user }))
+
+    if (!loadedUser) {
+      const error: ErrorType = new Error('Account not found.')
+      error.statusCode = 404
+      throw error
+    }
+
+    if (loadedUser.activated) {
+      const error: ErrorType = new Error('Account is already verified.')
+      error.statusCode = 409
+      throw error
+    }
+
+    if (!process.env.EMAIL_SECRET) {
+      throw new Error('JWT secret missing.')
+    }
+
+    const confirmToken = jwt.sign(
+      {
+        id: loadedUser._id,
+      },
+      process.env.EMAIL_SECRET,
+      {
+        expiresIn: process.env.EMAIL_EXPIRES_IN,
+      }
+    )
+
+    await sendConfirmAccountMail(
+      loadedUser.email,
+      confirmToken,
+      loadedUser.username,
+      req.body.redirectOnConfirm,
+      req.body.language
+    )
+
+    res.status(200).json({
+      message: 'Verify email sent!',
     })
   } catch (err: any) {
     next(err)
