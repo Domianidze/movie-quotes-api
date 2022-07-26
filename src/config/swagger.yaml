@@ -8,3 +8,113 @@ servers:
     description: local server
   - url: 
     description: production server
+
+paths:
+  /signup:
+    post:
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            example:
+                username: testuser
+                email: testuser@gmail.com
+                password: test123
+                redirectOnConfirm: http://localhost:3000/confirm-account
+                language: en
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  required: true
+                email:
+                  type: string
+                  required: true
+                password:
+                  type: string
+                  required: true
+                redirectOnConfirm:
+                  type: string
+                  required: true
+                language:
+                  type: string
+      responses:
+        '201':
+          description: Signed up successfully!
+          content:
+            application/json:
+              example:
+                message: Signed up successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '422':
+          description: Username or Email is already taken.
+          content:
+            application/json:
+              example:
+                message: Username or Email is already taken.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+  /verify-account:
+    post:
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            example:
+                token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyZGVjYzZmMjYxMDZhNTEwZWQyNjg0ZSIsImlhdCI6MTY1ODc2ODQ5NSwiZXhwIjoxNjU4NzcyMDk1fQ.x8MHRNLbBOJgHZ1ORLfsAkOUQ1ZhULe4fFk5dCoCnJ4
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  required: true
+      responses:
+        '200':
+          description: Account verified successfully!
+          content:
+            application/json:
+              example:
+                message: Account verified successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+      responses:
+        '409':
+          description: Account is already verified.
+          content:
+            application/json:
+              example:
+                message: Account is already verified.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '422':
+          description: Invalid token.
+          content:
+            application/json:
+              example:
+                message: Invalid token.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true

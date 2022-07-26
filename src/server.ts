@@ -1,10 +1,11 @@
-import express, { Express, Request, Response } from 'express'
+import express, { Express } from 'express'
 import bodyParser from 'body-parser'
 import mongoose from 'mongoose'
 import SwaggerUI from 'swagger-ui-express'
 import 'dotenv/config'
 
-import { swaggerMiddleware } from 'middleware'
+import { swaggerMiddleware, errorMiddleware } from 'middleware'
+import { authRoutes } from 'routes'
 import { getMongoUrl } from 'helpers'
 
 const server: Express = express()
@@ -13,11 +14,9 @@ server.use(bodyParser.json())
 
 server.use('/api-docs', SwaggerUI.serve, swaggerMiddleware())
 
-server.use((_: Request, res: Response) => {
-  res.json({
-    message: 'Hello World!',
-  })
-})
+server.use(authRoutes)
+
+server.use(errorMiddleware)
 
 const startServer = async () => {
   try {
