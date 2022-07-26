@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 import { User } from 'models'
-import { signUpSchema, logInSchema, resendVerifySchema } from 'schemas'
+import { signUpSchema, logInSchema, sendEmailSchema } from 'schemas'
 import { sendVerifyAccountEmail } from 'mail'
 import { ErrorType, JwtPayloadType } from 'types'
 
@@ -190,7 +190,7 @@ export const resendVerify = async (
   next: NextFunction
 ) => {
   try {
-    await resendVerifySchema.validateAsync(req.body)
+    await sendEmailSchema.validateAsync(req.body)
 
     const loadedUser =
       (await User.findOne({ username: req.body.user })) ||

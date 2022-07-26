@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 import { User } from 'models'
+import { sendEmailSchema, recoverPasswordSchema } from 'schemas'
 import { sendPasswordRecoveryEmail } from 'mail'
 import { ErrorType, JwtPayloadType } from 'types'
 
@@ -12,6 +13,8 @@ export const sendPasswordRecoveryLink = async (
   next: NextFunction
 ) => {
   try {
+    await sendEmailSchema.validateAsync(req.body)
+
     const loadedUser =
       (await User.findOne({ username: req.body.user })) ||
       (await User.findOne({ email: req.body.user }))
@@ -58,6 +61,8 @@ export const recoverPassword = async (
   next: NextFunction
 ) => {
   try {
+    await recoverPasswordSchema.validateAsync(req.body)
+
     if (!process.env.PASSWORD_SECRET) {
       throw new Error('JWT secret missing.')
     }
