@@ -1,11 +1,6 @@
 import express from 'express'
 
-import {
-  signUp,
-  logIn,
-  verifyAccount,
-  resendVerify,
-} from 'controllers/auth-controller'
+import { signUp, logIn, verifyAccount, resendVerify } from 'controllers'
 
 const Router = express.Router()
 
