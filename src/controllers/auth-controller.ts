@@ -181,3 +181,55 @@ export const verifyAccount = async (
     next(err)
   }
 }
+
+export const resendVerify = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const loadedUser =
+      (await User.findOne({ username: req.body.user })) ||
+      (await User.findOne({ email: req.body.user }))
+
+    if (!loadedUser) {
+      const error: ErrorType = new Error('Account not found.')
+      error.statusCode = 404
+      throw error
+    }
+
+    if (loadedUser.activated) {
+      const error: ErrorType = new Error('Account is already verified.')
+      error.statusCode = 409
+      throw error
+    }
+
+    if (!process.env.EMAIL_SECRET) {
+      throw new Error('JWT secret missing.')
+    }
+
+    const confirmToken = jwt.sign(
+      {
+        id: loadedUser._id,
+      },
+      process.env.EMAIL_SECRET,
+      {
+        expiresIn: process.env.EMAIL_EXPIRES_IN,
+      }
+    )
+
+    await sendConfirmAccountMail(
+      loadedUser.email,
+      confirmToken,
+      loadedUser.username,
+      req.body.redirectOnConfirm,
+      req.body.language
+    )
+
+    res.status(200).json({
+      message: 'Verify email sent!',
+    })
+  } catch (err: any) {
+    next(err)
+  }
+}
