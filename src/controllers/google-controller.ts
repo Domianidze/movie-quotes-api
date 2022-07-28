@@ -13,13 +13,14 @@ export const googelAuth = async (
   try {
     await googleAuthSchema.validateAsync(req.body)
 
-    const username = req.body.email.replace('@gmail.com', '')
-
-    let user = await User.findOne({ username })
+    let user = await User.findOne({ email: req.body.email })
     let statusCode = 200
 
     if (!user) {
-      user = await User.create({ username, email: req.body.email })
+      user = await User.create({
+        username: req.body.name,
+        email: req.body.email,
+      })
       statusCode = 201
     }
 
