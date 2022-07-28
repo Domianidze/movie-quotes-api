@@ -117,9 +117,7 @@ export const logIn = async (
       throw error
     }
 
-    const expiresIn = req.body.rememberMe
-      ? '365d'
-      : process.env.SESSION_EXPIRES_IN
+    const expiresIn = req.body.rememberMe ? '365d' : '1d'
 
     const token = jwt.sign(
       {
