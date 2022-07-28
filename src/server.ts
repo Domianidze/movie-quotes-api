@@ -1,4 +1,5 @@
 import express, { Express } from 'express'
+import cors from 'cors'
 import bodyParser from 'body-parser'
 import mongoose from 'mongoose'
 import SwaggerUI from 'swagger-ui-express'
@@ -9,6 +10,8 @@ import { authRoutes, passwordRecoveryRoutes } from 'routes'
 import { getMongoUrl } from 'helpers'
 
 const server: Express = express()
+
+server.use(cors())
 
 server.use(bodyParser.json())
 
