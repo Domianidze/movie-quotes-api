@@ -26,7 +26,7 @@ export const signUp = async (
     }
 
     const existingEmail = await User.findOne({
-      username: req.body.username,
+      email: req.body.email,
     })
 
     if (existingEmail) {
@@ -124,6 +124,7 @@ export const logIn = async (
     const token = jwt.sign(
       {
         id: loadedUser._id,
+        username: loadedUser.username,
       },
       process.env.SESSION_SECRET,
       {
@@ -134,6 +135,7 @@ export const logIn = async (
     res.status(200).json({
       token,
       id: loadedUser.id.toString(),
+      username: loadedUser.username,
       expiresIn,
     })
   } catch (err) {
@@ -162,7 +164,7 @@ export const verifyAccount = async (
       throw error
     }
 
-    const user = await User.findOneAndUpdate({ activated: true }, { _id: id })
+    const user = await User.findOne({ _id: id })
 
     if (!user) {
       const error: ErrorType = new Error('Account not found.')
@@ -175,6 +177,8 @@ export const verifyAccount = async (
       error.statusCode = 409
       throw error
     }
+
+    await user.updateOne({ activated: true })
 
     res.status(200).json({
       message: 'Account activated successfully!',
