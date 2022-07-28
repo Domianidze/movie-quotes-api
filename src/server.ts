@@ -1,18 +1,19 @@
 import express, { Express } from 'express'
+import cors from 'cors'
 import bodyParser from 'body-parser'
 import mongoose from 'mongoose'
 import SwaggerUI from 'swagger-ui-express'
 import 'dotenv/config'
 
-import { corsMiddleware, swaggerMiddleware, errorMiddleware } from 'middleware'
+import { swaggerMiddleware, errorMiddleware } from 'middleware'
 import { authRoutes, passwordRecoveryRoutes } from 'routes'
 import { getMongoUrl } from 'helpers'
 
 const server: Express = express()
 
-server.use(bodyParser.json())
+server.use(cors())
 
-server.use(corsMiddleware)
+server.use(bodyParser.json())
 
 server.use('/api-docs', SwaggerUI.serve, swaggerMiddleware())
 

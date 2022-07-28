@@ -95,8 +95,8 @@ paths:
             application/json:
               example:
                 token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJ1c2VySWQiOiI2MmE0OGQ0OGQyYzM2YjM3MjQxYThmNWIiLCJpYXQiOjE2NTUyMzIzMjQsImV4cCI6MTY1NTIzNTkyNH0.VG9OmL4PLbeR2oGMTmhAFd09Sn4OTmaC6T9sXiwWXdA
-                id: '62a48d48d2c36b37241a8f5b',
-                username: testuser,
+                id: '62a48d48d2c36b37241a8f5b'
+                username: testuser
                 expiresIn: 1h
               schema:
                 type: object
