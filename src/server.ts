@@ -4,13 +4,15 @@ import mongoose from 'mongoose'
 import SwaggerUI from 'swagger-ui-express'
 import 'dotenv/config'
 
-import { swaggerMiddleware, errorMiddleware } from 'middleware'
+import { corsMiddleware, swaggerMiddleware, errorMiddleware } from 'middleware'
 import { authRoutes, passwordRecoveryRoutes } from 'routes'
 import { getMongoUrl } from 'helpers'
 
 const server: Express = express()
 
 server.use(bodyParser.json())
+
+server.use(corsMiddleware)
 
 server.use('/api-docs', SwaggerUI.serve, swaggerMiddleware())
 
