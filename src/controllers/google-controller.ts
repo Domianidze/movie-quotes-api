@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 
 import { User } from 'models'
+import { googleAuthSchema } from 'schemas'
 import { ErrorType } from 'types'
 
 export const googelAuth = async (
@@ -10,6 +11,8 @@ export const googelAuth = async (
   next: NextFunction
 ) => {
   try {
+    await googleAuthSchema.validateAsync(req.body)
+
     const username = req.body.email.replace('@gmail.com', '')
 
     let user = await User.findOne({ username })
