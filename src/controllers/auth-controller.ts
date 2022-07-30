@@ -88,7 +88,7 @@ export const logIn = async (
       (await User.findOne({ username: req.body.user })) ||
       (await User.findOne({ email: req.body.user }))
 
-    if (!loadedUser) {
+    if (!loadedUser || !loadedUser.password) {
       const error: ErrorType = new Error('Invalid credentials.')
       error.statusCode = 422
       throw error

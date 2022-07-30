@@ -15,9 +15,7 @@ export const sendPasswordRecoveryLink = async (
   try {
     await sendEmailSchema.validateAsync(req.body)
 
-    const loadedUser =
-      (await User.findOne({ username: req.body.user })) ||
-      (await User.findOne({ email: req.body.user }))
+    const loadedUser = await User.findOne({ email: req.body.email })
 
     if (!loadedUser) {
       const error: ErrorType = new Error('Account not found.')
@@ -80,7 +78,7 @@ export const recoverPassword = async (
 
     const loadedUser = await User.findOne({ _id: id })
 
-    if (!loadedUser) {
+    if (!loadedUser || !loadedUser.password) {
       const error: ErrorType = new Error('Account not found.')
       error.statusCode = 404
       throw error

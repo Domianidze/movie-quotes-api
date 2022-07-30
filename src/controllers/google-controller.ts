@@ -41,7 +41,6 @@ export const googelAuth = async (
     res.status(statusCode).json({
       token,
       id: user.id.toString(),
-      username: user.username,
     })
   } catch (err) {
     next(err)
