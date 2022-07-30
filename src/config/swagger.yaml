@@ -113,6 +113,18 @@ paths:
                   expiresIn:
                     type: string
                     required: true
+        '403':
+          description: Account is not activated.
+          content:
+            application/json:
+              example:
+                message: Account is not activated.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
         '422':
           description: Invalid credentials.
           content:
@@ -304,7 +316,7 @@ paths:
         content:
           application/json:
             example:
-                user: testuser@gmail.com
+                email: testuser@gmail.com
                 redirectOnConfirm: http://localhost:3000/recover-password
                 language: en
             schema:
@@ -337,18 +349,6 @@ paths:
             application/json:
               example:
                 message: Account not found.
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    required: true
-        '422':
-          description: Invalid token.
-          content:
-            application/json:
-              example:
-                message: Invalid token.
               schema:
                 type: object
                 properties:
