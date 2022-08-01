@@ -35,7 +35,7 @@ server.use('/google', googleRoutes)
 
 server.use('/password', passwordRecoveryRoutes)
 
-server.use('/movie', movieRoutes)
+server.use(movieRoutes)
 
 server.use(errorMiddleware)
 

@@ -1,9 +1,11 @@
 import express from 'express'
 
-import { addMovie } from 'controllers'
+import { getMovies, addMovie } from 'controllers'
 
 const Router = express.Router()
 
-Router.post('', addMovie)
+Router.get('/movies', getMovies)
+
+Router.post('/movie', addMovie)
 
 export default Router

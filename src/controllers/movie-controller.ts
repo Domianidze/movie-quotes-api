@@ -4,6 +4,25 @@ import { User, Movie } from 'models'
 import { getApiUrl } from 'helpers'
 import { ErrorType } from 'types'
 
+export const getMovies = async (
+  _: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const response = await Movie.find()
+      .select('-__v')
+      .populate({
+        path: 'createdBy',
+        select: ['username'],
+      })
+
+    res.status(200).json(response)
+  } catch (err) {
+    next(err)
+  }
+}
+
 export const addMovie = async (
   req: Request,
   res: Response,
