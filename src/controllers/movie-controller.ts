@@ -3,7 +3,7 @@ import fs from 'fs'
 
 import { User, Movie } from 'models'
 import { postMovieSchema, putMovieSchema } from 'schemas'
-import { getApiUrl, getImagePath, validateId } from 'helpers'
+import { getApiUrl, getImagePath, removeImage, validateId } from 'helpers'
 import { ErrorType } from 'types'
 
 export const getMovies = async (
@@ -60,7 +60,9 @@ export const addMovie = async (
   try {
     await postMovieSchema.validateAsync(req.body)
 
-    validateId(req.body.createdBy)
+    const createdBy = req.user.id
+
+    validateId(createdBy)
 
     if (!req.file) {
       const error: ErrorType = new Error('Proper image not found.')
@@ -68,7 +70,7 @@ export const addMovie = async (
       throw error
     }
 
-    const user = await User.findById(req.body.createdBy)
+    const user = await User.findById(createdBy)
 
     if (!user) {
       const error: ErrorType = new Error('User not found.')
@@ -76,7 +78,11 @@ export const addMovie = async (
       throw error
     }
 
-    const movie = { ...req.body, image: `${getApiUrl()}/${req.file.path}` }
+    const movie = {
+      ...req.body,
+      image: `${getApiUrl()}/${req.file.path}`,
+      createdBy,
+    }
 
     const response = await Movie.create(movie)
 
@@ -85,6 +91,10 @@ export const addMovie = async (
       id: response._id,
     })
   } catch (err) {
+    if (req.file) {
+      removeImage(req.file.path)
+    }
+
     next(err)
   }
 }
@@ -113,24 +123,28 @@ export const editMovie = async (
       data
     )
 
-    if (!movie) {
+    if (!movie || !movie.createdBy) {
       const error: ErrorType = new Error('No movie found.')
       error.statusCode = 404
       throw error
     }
 
-    if (image) {
-      const imagePath = getImagePath(movie.image)
-
-      if (fs.existsSync(imagePath)) {
-        await fs.promises.unlink(imagePath)
-      }
+    if (req.user.id.toString() !== movie.createdBy.toString()) {
+      const error: ErrorType = new Error('Access to this movie not found.')
+      error.statusCode = 401
+      throw error
     }
+
+    if (image) removeImage(movie.image)
 
     res.status(200).json({
       message: 'Movie edited successfully!',
     })
   } catch (err) {
+    if (req.file) {
+      removeImage(req.file.path)
+    }
+
     next(err)
   }
 }

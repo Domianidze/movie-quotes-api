@@ -10,6 +10,7 @@ import {
   multerMiddleware,
   swaggerMiddleware,
   errorMiddleware,
+  authMiddleware,
 } from 'middleware'
 import {
   authRoutes,
@@ -35,7 +36,7 @@ server.use('/google', googleRoutes)
 
 server.use('/password', passwordRecoveryRoutes)
 
-server.use(movieRoutes)
+server.use(authMiddleware, movieRoutes)
 
 server.use(errorMiddleware)
 

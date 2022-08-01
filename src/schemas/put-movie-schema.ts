@@ -9,4 +9,4 @@ export default Joi.object({
   directorGe: Joi.string(),
   descriptionEn: Joi.string(),
   descriptionGe: Joi.string(),
-})
+}).min(2)

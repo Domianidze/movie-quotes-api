@@ -8,6 +8,12 @@ servers:
     description: local server
   - url: 
     description: production server
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 
 paths:
   /signup:
@@ -427,6 +433,8 @@ paths:
     get:
       tags:
         - Movie
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Get movies successfully!
@@ -490,6 +498,8 @@ paths:
     get:
       tags:
         - Movie
+      security:
+        - bearerAuth: []
       parameters: 
         - in: path
           name: id
@@ -557,6 +567,8 @@ paths:
     post:
       tags:
         - Movie
+      security:
+        - bearerAuth: []
       requestBody:
         content:
           multipart/form-data:
@@ -581,8 +593,6 @@ paths:
                   type: string
                 image:
                   type: file
-                createdBy:
-                  type: string
               required:
               - nameEn
               - nameGe
@@ -592,7 +602,6 @@ paths:
               - descriptionEn
               - descriptionGe
               - image
-              - createdBy
       responses:
         '201':
           description: Movie added successfully!
@@ -637,6 +646,8 @@ paths:
     put:
       tags:
         - Movie
+      security:
+        - bearerAuth: []
       requestBody:
         content:
           multipart/form-data:
@@ -693,6 +704,8 @@ paths:
     delete:
       tags:
         - Movie
+      security:
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
