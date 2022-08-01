@@ -1,4 +1,5 @@
 import express, { Express } from 'express'
+import path from 'path'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import mongoose from 'mongoose'
@@ -10,7 +11,12 @@ import {
   swaggerMiddleware,
   errorMiddleware,
 } from 'middleware'
-import { authRoutes, googleRoutes, passwordRecoveryRoutes } from 'routes'
+import {
+  authRoutes,
+  googleRoutes,
+  passwordRecoveryRoutes,
+  movieRoutes,
+} from 'routes'
 import { getMongoUrl } from 'helpers'
 
 const server: Express = express()
@@ -19,6 +25,7 @@ server.use(cors())
 server.use(bodyParser.json())
 
 server.use(multerMiddleware)
+server.use('/storage', express.static(path.join('storage')))
 
 server.use('/api-docs', SwaggerUI.serve, swaggerMiddleware())
 
@@ -27,6 +34,8 @@ server.use(authRoutes)
 server.use('/google', googleRoutes)
 
 server.use('/password', passwordRecoveryRoutes)
+
+server.use('/movie', movieRoutes)
 
 server.use(errorMiddleware)
 

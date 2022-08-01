@@ -3,20 +3,32 @@ import mongoose from 'mongoose'
 const { Schema } = mongoose
 
 const movieSchema = new Schema({
-  name: {
-    type: Object,
+  nameEn: {
+    type: String,
+    required: true,
+  },
+  nameGe: {
+    type: String,
     required: true,
   },
   tags: {
     type: Array,
     required: true,
   },
-  director: {
-    type: Object,
+  directorEn: {
+    type: String,
     required: true,
   },
-  description: {
-    type: Object,
+  directorGe: {
+    type: String,
+    required: true,
+  },
+  descriptionEn: {
+    type: String,
+    required: true,
+  },
+  descriptionGe: {
+    type: String,
     required: true,
   },
   image: {

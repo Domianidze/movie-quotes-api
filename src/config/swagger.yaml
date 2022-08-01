@@ -423,3 +423,92 @@ paths:
                   message:
                     type: string
                     required: true
+  /movie:
+    post:
+      tags:
+        - Movie
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                nameEn:
+                  type: string
+                nameGe:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: string
+                directorEn:
+                  type: string
+                directorGe:
+                  type: string
+                descriptionEn:
+                  type: string
+                descriptionGe:
+                  type: string
+                image:
+                  type: file
+                createdBy:
+                  type: string
+              required:
+              - nameEn
+              - nameGe
+              - tags
+              - directorEn
+              - directorGe
+              - descriptionEn
+              - descriptionGe
+              - image
+              - createdBy
+      responses:
+        '200':
+          description: Password recovered successfully!
+          content:
+            application/json:
+              example:
+                message: Password recovered successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: Account not found.
+          content:
+            application/json:
+              example:
+                message: Account not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '409':
+          description: Same password.
+          content:
+            application/json:
+              example:
+                message: Same password.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '422':
+          description: Invalid token.
+          content:
+            application/json:
+              example:
+                message: Invalid token.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true

@@ -4,6 +4,9 @@
 # typescript
 build
 
+#storage
+storage
+
 # env
 .env
 
