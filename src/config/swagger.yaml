@@ -634,3 +634,59 @@ paths:
                   message:
                     type: string
                     required: true
+    put:
+      tags:
+        - Movie
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                nameEn:
+                  type: string
+                nameGe:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: string
+                directorEn:
+                  type: string
+                directorGe:
+                  type: string
+                descriptionEn:
+                  type: string
+                descriptionGe:
+                  type: string
+                image:
+                  type: file
+              required:
+              - id
+      responses:
+        '200':
+          description: Movie updated successfully!
+          content:
+            application/json:
+              example:
+                message: Movie updated successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: Movie not found.
+          content:
+            application/json:
+              example:
+                message: User not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
