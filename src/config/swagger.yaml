@@ -690,3 +690,42 @@ paths:
                   message:
                     type: string
                     required: true
+    delete:
+      tags:
+        - Movie
+      requestBody:
+        content:
+          application/json:
+            example:
+                id: 62a86e06451633b832d24238
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  required: true
+      responses:
+        '200':
+          description: Movie deleted successfully!
+          content:
+            application/json:
+              example:
+                message: Movie deleted successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: Movie not found.
+          content:
+            application/json:
+              example:
+                message: User not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true

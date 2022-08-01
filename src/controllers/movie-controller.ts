@@ -111,15 +111,45 @@ export const editMovie = async (
     }
 
     if (image) {
-      const path = getImagePath(movie.image)
+      const imagePath = getImagePath(movie.image)
 
-      if (fs.existsSync(path)) {
-        await fs.promises.unlink(path)
+      if (fs.existsSync(imagePath)) {
+        await fs.promises.unlink(imagePath)
       }
     }
 
     res.status(200).json({
       message: 'Movie edited successfully!',
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const deleteMovie = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const movie = await Movie.findByIdAndRemove({
+      _id: req.body.id,
+    })
+
+    if (!movie) {
+      const error: ErrorType = new Error('No movie found.')
+      error.statusCode = 404
+      throw error
+    }
+
+    const imagePath = getImagePath(movie.image)
+
+    if (fs.existsSync(imagePath)) {
+      await fs.promises.unlink(imagePath)
+    }
+
+    res.status(200).json({
+      message: 'Movie deleted successfully!',
     })
   } catch (err) {
     next(err)

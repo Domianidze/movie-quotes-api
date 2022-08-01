@@ -1,6 +1,12 @@
 import express from 'express'
 
-import { getMovies, getMovie, addMovie, editMovie } from 'controllers'
+import {
+  getMovies,
+  getMovie,
+  addMovie,
+  editMovie,
+  deleteMovie,
+} from 'controllers'
 
 const Router = express.Router()
 
@@ -11,5 +17,7 @@ Router.get('/movie/:id', getMovie)
 Router.post('/movie', addMovie)
 
 Router.put('/movie', editMovie)
+
+Router.delete('/movie', deleteMovie)
 
 export default Router
