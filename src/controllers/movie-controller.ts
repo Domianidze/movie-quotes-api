@@ -1,9 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
-import fs from 'fs'
 
 import { User, Movie } from 'models'
 import { postMovieSchema, putMovieSchema } from 'schemas'
-import { getApiUrl, getImagePath, removeImage, validateId } from 'helpers'
+import { getApiUrl, removeImage, validateId } from 'helpers'
 import { ErrorType } from 'types'
 
 export const getMovies = async (
@@ -167,11 +166,7 @@ export const deleteMovie = async (
       throw error
     }
 
-    const imagePath = getImagePath(movie.image)
-
-    if (fs.existsSync(imagePath)) {
-      await fs.promises.unlink(imagePath)
-    }
+    removeImage(movie.image)
 
     res.status(200).json({
       message: 'Movie deleted successfully!',
