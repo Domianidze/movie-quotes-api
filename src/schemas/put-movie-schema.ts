@@ -4,7 +4,7 @@ export default Joi.object({
   id: Joi.any(),
   nameEn: Joi.string(),
   nameGe: Joi.string(),
-  tags: Joi.array(),
+  tags: Joi.string(),
   directorEn: Joi.string(),
   directorGe: Joi.string(),
   descriptionEn: Joi.string(),

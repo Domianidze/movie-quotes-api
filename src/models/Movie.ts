@@ -12,7 +12,7 @@ const movieSchema = new Schema({
     required: true,
   },
   tags: {
-    type: Array,
+    type: String,
     required: true,
   },
   directorEn: {

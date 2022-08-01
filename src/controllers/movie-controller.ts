@@ -108,19 +108,7 @@ export const editMovie = async (
 
     validateId(req.body.id)
 
-    const image = req.file
-
-    const data = {
-      ...req.body,
-      ...(image && { image: `${getApiUrl()}/${image.path}` }),
-    }
-
-    const movie = await Movie.findOneAndUpdate(
-      {
-        _id: req.body.id,
-      },
-      data
-    )
+    const movie = await Movie.findById(req.body.id)
 
     if (!movie || !movie.createdBy) {
       const error: ErrorType = new Error('Movie not found.')
@@ -129,12 +117,23 @@ export const editMovie = async (
     }
 
     if (req.user.id.toString() !== movie.createdBy.toString()) {
-      const error: ErrorType = new Error('Access to this movie not found.')
+      const error: ErrorType = new Error('Not authorized.')
       error.statusCode = 401
       throw error
     }
 
-    if (image) removeImage(movie.image)
+    const image = req.file
+
+    const data = {
+      ...req.body,
+      ...(image && { image: `${getApiUrl()}/${image.path}` }),
+    }
+
+    await movie.update(data)
+
+    if (image) {
+      removeImage(movie.image)
+    }
 
     res.status(200).json({
       message: 'Movie edited successfully!',
