@@ -2,7 +2,8 @@ import { Request, Response, NextFunction } from 'express'
 import fs from 'fs'
 
 import { User, Movie } from 'models'
-import { getApiUrl, getImagePath } from 'helpers'
+import { postMovieSchema, putMovieSchema } from 'schemas'
+import { getApiUrl, getImagePath, validateId } from 'helpers'
 import { ErrorType } from 'types'
 
 export const getMovies = async (
@@ -30,6 +31,8 @@ export const getMovie = async (
   next: NextFunction
 ) => {
   try {
+    validateId(req.params.id)
+
     const movie = await Movie.findById(req.params.id)
       .select('-__v')
       .populate({
@@ -55,6 +58,10 @@ export const addMovie = async (
   next: NextFunction
 ) => {
   try {
+    await postMovieSchema.validateAsync(req.body)
+
+    validateId(req.body.createdBy)
+
     if (!req.file) {
       const error: ErrorType = new Error('Proper image not found.')
       error.statusCode = 422
@@ -88,14 +95,16 @@ export const editMovie = async (
   next: NextFunction
 ) => {
   try {
+    await putMovieSchema.validateAsync(req.body)
+
+    validateId(req.body.id)
+
     const image = req.file
 
     const data = {
       ...req.body,
       ...(image && { image: `${getApiUrl()}/${image.path}` }),
     }
-
-    console.log(data)
 
     const movie = await Movie.findOneAndUpdate(
       {
@@ -132,6 +141,8 @@ export const deleteMovie = async (
   next: NextFunction
 ) => {
   try {
+    validateId(req.body.id)
+
     const movie = await Movie.findByIdAndRemove({
       _id: req.body.id,
     })
