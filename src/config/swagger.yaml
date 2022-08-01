@@ -735,7 +735,7 @@ paths:
           content:
             application/json:
               example:
-                message: User not found.
+                message: Movie not found.
               schema:
                 type: object
                 properties:

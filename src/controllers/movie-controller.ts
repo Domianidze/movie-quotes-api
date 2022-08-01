@@ -123,7 +123,7 @@ export const editMovie = async (
     )
 
     if (!movie || !movie.createdBy) {
-      const error: ErrorType = new Error('No movie found.')
+      const error: ErrorType = new Error('Movie not found.')
       error.statusCode = 404
       throw error
     }
@@ -161,7 +161,7 @@ export const deleteMovie = async (
     })
 
     if (!movie) {
-      const error: ErrorType = new Error('No movie found.')
+      const error: ErrorType = new Error('Movie not found.')
       error.statusCode = 404
       throw error
     }
