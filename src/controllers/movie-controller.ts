@@ -23,6 +23,31 @@ export const getMovies = async (
   }
 }
 
+export const getMovie = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const response = await Movie.findById(req.params.id)
+      .select('-__v')
+      .populate({
+        path: 'createdBy',
+        select: ['username'],
+      })
+
+    if (!response) {
+      const error: ErrorType = new Error('Movie not found.')
+      error.statusCode = 404
+      throw error
+    }
+
+    res.status(200).json(response)
+  } catch (err) {
+    next(err)
+  }
+}
+
 export const addMovie = async (
   req: Request,
   res: Response,
@@ -37,7 +62,7 @@ export const addMovie = async (
 
     const image = `${getApiUrl()}/${req.file.path}`
 
-    const user = await User.findOne({ _id: req.body.createdBy })
+    const user = await User.findById(req.body.createdBy)
 
     if (!user) {
       const error: ErrorType = new Error('User not found.')
