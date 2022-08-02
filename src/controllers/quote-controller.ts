@@ -33,6 +33,37 @@ export const getQuotes = async (
   }
 }
 
+export const getQuote = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    validateId(req.params.id)
+
+    const quote = await Quote.findById(req.params.id)
+      .select('-__v')
+      .populate({
+        path: 'movie',
+        select: ['-__v', '-createdBy'],
+      })
+      .populate({
+        path: 'createdBy',
+        select: ['username'],
+      })
+
+    if (!quote) {
+      const error: ErrorType = new Error('Quote not found.')
+      error.statusCode = 404
+      throw error
+    }
+
+    res.status(200).json(quote)
+  } catch (err) {
+    next(err)
+  }
+}
+
 export const addQuote = async (
   req: Request,
   res: Response,
