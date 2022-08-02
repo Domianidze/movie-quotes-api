@@ -754,6 +754,18 @@ paths:
                   message:
                     type: string
                     required: true
+        '401':
+          description: Not authorized.
+          content:
+            application/json:
+              example:
+                message: Not authorized.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
         '404':
           description: Movie not found.
           content:
@@ -1059,6 +1071,59 @@ paths:
             application/json:
               example:
                 message: Quote updated successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '401':
+          description: Not authorized.
+          content:
+            application/json:
+              example:
+                message: Not authorized.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: Quote not found.
+          content:
+            application/json:
+              example:
+                message: Quote not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+    delete:
+      tags:
+        - Quote
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            example:
+                id: 62a86e06451633b832d24238
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  required: true
+      responses:
+        '200':
+          description: Quote deleted successfully!
+          content:
+            application/json:
+              example:
+                message: Quote deleted successfully!
               schema:
                 type: object
                 properties:

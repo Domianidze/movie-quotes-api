@@ -1,6 +1,12 @@
 import express from 'express'
 
-import { getQuotes, getQuote, addQuote, editQuote } from 'controllers'
+import {
+  getQuotes,
+  getQuote,
+  addQuote,
+  editQuote,
+  deleteQuote,
+} from 'controllers'
 
 const Router = express.Router()
 
@@ -11,5 +17,7 @@ Router.get('/quote/:id', getQuote)
 Router.post('/quote', addQuote)
 
 Router.put('/quote', editQuote)
+
+Router.delete('/quote', deleteQuote)
 
 export default Router

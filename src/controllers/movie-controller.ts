@@ -155,15 +155,21 @@ export const deleteMovie = async (
   try {
     validateId(req.body.id)
 
-    const movie = await Movie.findByIdAndRemove({
-      _id: req.body.id,
-    })
+    const movie = await Movie.findById(req.body.id)
 
-    if (!movie) {
+    if (!movie || !movie.createdBy) {
       const error: ErrorType = new Error('Movie not found.')
       error.statusCode = 404
       throw error
     }
+
+    if (req.user.id.toString() !== movie.createdBy.toString()) {
+      const error: ErrorType = new Error('Not authorized.')
+      error.statusCode = 401
+      throw error
+    }
+
+    await movie.remove()
 
     removeImage(movie.image)
 
