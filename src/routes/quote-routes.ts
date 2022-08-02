@@ -7,7 +7,8 @@ import {
   editQuote,
   deleteQuote,
   likeQuote,
-  commentQuote,
+  postCommentQuote,
+  deleteCommentQuote,
 } from 'controllers'
 
 const Router = express.Router()
@@ -24,6 +25,8 @@ Router.delete('/quote', deleteQuote)
 
 Router.post('/like-quote', likeQuote)
 
-Router.post('/comment-quote', commentQuote)
+Router.post('/comment-quote', postCommentQuote)
+
+Router.delete('/comment-quote', deleteCommentQuote)
 
 export default Router

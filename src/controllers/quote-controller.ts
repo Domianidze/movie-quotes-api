@@ -238,8 +238,6 @@ export const likeQuote = async (
         (like) => like.likedBy?.toString() !== req.user.id.toString()
       )
 
-      console.log('hello', filteredLikes)
-
       await quote.update({
         $set: { likes: filteredLikes },
       })
@@ -262,7 +260,7 @@ export const likeQuote = async (
   }
 }
 
-export const commentQuote = async (
+export const postCommentQuote = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -286,6 +284,55 @@ export const commentQuote = async (
 
     res.status(200).json({
       message: 'Commented on quote successfully!',
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const deleteCommentQuote = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    validateId(req.body.id)
+    validateId(req.body.quoteId)
+
+    const quote = await Quote.findById(req.body.quoteId)
+
+    if (!quote) {
+      const error: ErrorType = new Error('Quote not found.')
+      error.statusCode = 404
+      throw error
+    }
+
+    const foundComment = quote.comments.find(
+      (comment: any) => comment._id.toString() === req.body.id.toString()
+    )
+
+    if (!foundComment) {
+      const error: ErrorType = new Error('Comment not found.')
+      error.statusCode = 404
+      throw error
+    }
+
+    if (foundComment.commentedBy?.toString() !== req.user.id.toString()) {
+      const error: ErrorType = new Error('Not authorized.')
+      error.statusCode = 401
+      throw error
+    }
+
+    const filteredComments = quote.comments.filter(
+      (comment: any) => comment._id.toString() !== req.body.id.toString()
+    )
+
+    await quote.update({
+      $set: { comments: filteredComments },
+    })
+
+    res.status(200).json({
+      message: 'Commented deleted successfully!',
     })
   } catch (err) {
     next(err)

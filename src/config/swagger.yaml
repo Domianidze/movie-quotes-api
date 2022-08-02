@@ -1245,6 +1245,9 @@ paths:
             schema:
               type: object
               properties:
+                comment:
+                  type: string
+                  required: true
                 id:
                   type: string
                   required: true
@@ -1267,6 +1270,63 @@ paths:
             application/json:
               example:
                 message: Quote not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+    delete:
+      tags:
+        - Quote
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            example:
+                id: 62a86e06451633b832d24238
+                quoteId: 62a86e06451633b832d24238
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  required: true
+                quoteId:
+                  type: string
+                  required: true
+      responses:
+        '200':
+          description: Commented deleted successfully!
+          content:
+            application/json:
+              example:
+                message: Commented deleted successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '401':
+          description: Not authorized.
+          content:
+            application/json:
+              example:
+                message: Not authorized.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: Quote/Comment not found.
+          content:
+            application/json:
+              example:
+                message: Quote/Comment not found.
               schema:
                 type: object
                 properties:
