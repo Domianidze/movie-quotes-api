@@ -8,6 +8,12 @@ servers:
     description: local server
   - url: 
     description: production server
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 
 paths:
   /signup:
@@ -95,7 +101,7 @@ paths:
             application/json:
               example:
                 token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJ1c2VySWQiOiI2MmE0OGQ0OGQyYzM2YjM3MjQxYThmNWIiLCJpYXQiOjE2NTUyMzIzMjQsImV4cCI6MTY1NTIzNTkyNH0.VG9OmL4PLbeR2oGMTmhAFd09Sn4OTmaC6T9sXiwWXdA
-                id: '62a48d48d2c36b37241a8f5b'
+                id: 62a48d48d2c36b37241a8f5b
                 username: testuser
                 expiresIn: 1h
               schema:
@@ -417,6 +423,319 @@ paths:
             application/json:
               example:
                 message: Invalid token.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+  /movies:
+    get:
+      tags:
+        - Movie
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Get movies successfully!
+          content:
+            application/json:
+              example:
+                  - _id: 62a86e06451633b832d24238
+                    nameEn: Interstellar
+                    nameGe: ინტერსტელარი
+                    tags:
+                      - drama
+                    directorEn: Christopher Nolan
+                    directorGe: კრისტოფერ ნოლანი
+                    descriptionEn: When Earth becomes uninhabitable in the future, a farmer and ex-NASA pilot, Joseph Cooper, is tasked to pilot a spacecraft, along with a team of researchers, to find a new planet for humans.
+                    descriptionGe: კოსმონავტების ჯგუფი გამოუცნობი სამყაროს გამოსაკვლევად მიემართება და თავისი ხომალდით დედამიწასთან ახლოს მდებარე შავ ხვრელში შეფრინდებიან. ის მათ საშუალებას მისცემს გადაადგილდნენ წარმოუდგენელ მანძილებზე...
+                    image: http://localhost:8080/storage\img\2022-08-01T11-02-23.061Z-interstellar.png
+                    createdBy: 
+                      id: 62a86e06451633b832d24238
+                      username: testuser
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                      required: true
+                    nameEn:
+                      type: string
+                      required: true
+                    nameGe:
+                      type: string
+                      required: true
+                    tags:
+                      type: array
+                      required: true
+                    directorEn:
+                      type: string
+                      required: true
+                    directorGe:
+                      type: string
+                      required: true
+                    descriptionEn:
+                      type: string
+                      required: true
+                    descriptionGe:
+                      type: string
+                      required: true
+                    image:
+                      type: string
+                      required: true
+                    createdBy:
+                      type: object
+                      required: true
+                      properties:
+                        id: 
+                          type: string
+                        username: 
+                          type: string
+  /movie/{id}:
+    get:
+      tags:
+        - Movie
+      security:
+        - bearerAuth: []
+      parameters: 
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Get movie successfully!
+          content:
+            application/json:
+              example:
+                  _id: 62a86e06451633b832d24238
+                  nameEn: Interstellar
+                  nameGe: ინტერსტელარი
+                  tags:
+                    - drama
+                  directorEn: Christopher Nolan
+                  directorGe: კრისტოფერ ნოლანი
+                  descriptionEn: When Earth becomes uninhabitable in the future, a farmer and ex-NASA pilot, Joseph Cooper, is tasked to pilot a spacecraft, along with a team of researchers, to find a new planet for humans.
+                  descriptionGe: კოსმონავტების ჯგუფი გამოუცნობი სამყაროს გამოსაკვლევად მიემართება და თავისი ხომალდით დედამიწასთან ახლოს მდებარე შავ ხვრელში შეფრინდებიან. ის მათ საშუალებას მისცემს გადაადგილდნენ წარმოუდგენელ მანძილებზე...
+                  image: http://localhost:8080/storage\img\2022-08-01T11-02-23.061Z-interstellar.png
+                  createdBy: 
+                    id: 62a86e06451633b832d24238
+                    username: testuser
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    required: true
+                  nameEn:
+                    type: string
+                    required: true
+                  nameGe:
+                    type: string
+                    required: true
+                  tags:
+                    type: array
+                    required: true
+                  directorEn:
+                    type: string
+                    required: true
+                  directorGe:
+                    type: string
+                    required: true
+                  descriptionEn:
+                    type: string
+                    required: true
+                  descriptionGe:
+                    type: string
+                    required: true
+                  image:
+                    type: string
+                    required: true
+                  createdBy:
+                    type: object
+                    required: true
+                    properties:
+                      id: 
+                        type: string
+                      username: 
+                        type: string
+  /movie:
+    post:
+      tags:
+        - Movie
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                nameEn:
+                  type: string
+                nameGe:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: string
+                directorEn:
+                  type: string
+                directorGe:
+                  type: string
+                descriptionEn:
+                  type: string
+                descriptionGe:
+                  type: string
+                image:
+                  type: file
+              required:
+              - nameEn
+              - nameGe
+              - tags
+              - directorEn
+              - directorGe
+              - descriptionEn
+              - descriptionGe
+              - image
+      responses:
+        '201':
+          description: Movie added successfully!
+          content:
+            application/json:
+              example:
+                message: Movie added successfully!
+                id: 62a48d48d2c36b37241a8f5b
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+                  id:
+                    type: string
+                    required: true
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              example:
+                message: User not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '422':
+          description: Proper image not found.
+          content:
+            application/json:
+              example:
+                message: Proper image not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+    put:
+      tags:
+        - Movie
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                nameEn:
+                  type: string
+                nameGe:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: string
+                directorEn:
+                  type: string
+                directorGe:
+                  type: string
+                descriptionEn:
+                  type: string
+                descriptionGe:
+                  type: string
+                image:
+                  type: file
+              required:
+              - id
+      responses:
+        '200':
+          description: Movie updated successfully!
+          content:
+            application/json:
+              example:
+                message: Movie updated successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: Movie not found.
+          content:
+            application/json:
+              example:
+                message: User not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+    delete:
+      tags:
+        - Movie
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            example:
+                id: 62a86e06451633b832d24238
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  required: true
+      responses:
+        '200':
+          description: Movie deleted successfully!
+          content:
+            application/json:
+              example:
+                message: Movie deleted successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: Movie not found.
+          content:
+            application/json:
+              example:
+                message: Movie not found.
               schema:
                 type: object
                 properties:
