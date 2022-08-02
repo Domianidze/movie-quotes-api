@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 
 import { postMovieSchema, putMovieSchema } from 'schemas'
 import { User, Movie } from 'models'
-import { moviePopulateQuery } from 'querys'
+import { moviePopulateQuery } from 'queries'
 import { getApiUrl, removeImage, validateId } from 'helpers'
 import { ErrorType } from 'types'
 

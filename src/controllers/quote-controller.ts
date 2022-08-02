@@ -6,7 +6,7 @@ import {
   postQuoteCommentSchema,
 } from 'schemas'
 import { User, Movie, Quote } from 'models'
-import { quotePopulateQuery } from 'querys'
+import { quotePopulateQuery } from 'queries'
 import { getApiUrl, removeImage, validateId } from 'helpers'
 import { ErrorType } from 'types'
 
