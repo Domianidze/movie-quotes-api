@@ -1230,7 +1230,7 @@ paths:
                   message:
                     type: string
                     required: true
-  /comment-quote:
+  /quote-comment:
     post:
       tags:
         - Quote

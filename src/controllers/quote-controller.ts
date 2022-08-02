@@ -260,7 +260,7 @@ export const likeQuote = async (
   }
 }
 
-export const postCommentQuote = async (
+export const postQuoteComment = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -290,7 +290,7 @@ export const postCommentQuote = async (
   }
 }
 
-export const deleteCommentQuote = async (
+export const deleteQuoteComment = async (
   req: Request,
   res: Response,
   next: NextFunction
