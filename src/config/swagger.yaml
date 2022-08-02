@@ -813,6 +813,11 @@ paths:
                     createdBy: 
                       id: 62a86e06451633b832d24238
                       username: testuser
+                    likes:
+                      - id: 62a86e06451633b832d24238
+                        likedBy:
+                          id: 62a86e06451633b832d24238
+                          username: testuser
               schema:
                 type: array
                 items:
@@ -866,6 +871,9 @@ paths:
                           type: string
                         username: 
                           type: string
+                    likes:
+                      type: array
+                      required: true
   /quote/{id}:
     get:
       tags:
@@ -902,6 +910,11 @@ paths:
                 createdBy: 
                   id: 62a86e06451633b832d24238
                   username: testuser
+                likes:
+                  - id: 62a86e06451633b832d24238
+                    likedBy:
+                      id: 62a86e06451633b832d24238
+                      username: testuser
               schema:
                 type: object
                 properties:
@@ -953,6 +966,9 @@ paths:
                         type: string
                       username: 
                         type: string
+                  likes:
+                    type: array
+                    required: true
         '404':
           description: Quote not found.
           content:
@@ -1136,6 +1152,48 @@ paths:
             application/json:
               example:
                 message: Not authorized.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: Quote not found.
+          content:
+            application/json:
+              example:
+                message: Quote not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+  /like-quote:
+    post:
+      tags:
+        - Quote
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            example:
+                id: 62a86e06451633b832d24238
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  required: true
+      responses:
+        '200':
+          description: Quote liked/unliked successfully!
+          content:
+            application/json:
+              example:
+                message: Quote liked/unliked successfully!
               schema:
                 type: object
                 properties:

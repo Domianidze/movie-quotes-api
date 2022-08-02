@@ -24,6 +24,10 @@ export const getQuotes = async (
         path: 'createdBy',
         select: ['username'],
       })
+      .populate({
+        path: 'likes.likedBy',
+        select: ['username'],
+      })
       .skip(skip)
       .limit(limit)
 
@@ -49,6 +53,10 @@ export const getQuote = async (
       })
       .populate({
         path: 'createdBy',
+        select: ['username'],
+      })
+      .populate({
+        path: 'likes.likedBy',
         select: ['username'],
       })
 
@@ -102,6 +110,7 @@ export const addQuote = async (
       ...req.body,
       image: `${getApiUrl()}/${req.file.path}`,
       createdBy,
+      likes: [],
     }
 
     const response = await Quote.create(quote)
@@ -194,6 +203,55 @@ export const deleteQuote = async (
 
     res.status(200).json({
       message: 'Quote deleted successfully!',
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const likeQuote = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    validateId(req.body.id)
+
+    const quote = await Quote.findById(req.body.id)
+
+    if (!quote) {
+      const error: ErrorType = new Error('Quote not found.')
+      error.statusCode = 404
+      throw error
+    }
+
+    const alreadyLiked = quote.likes.find(
+      (like) => like.likedBy?.toString() === req.user.id.toString()
+    )
+
+    if (alreadyLiked) {
+      const filteredLikes = quote.likes.filter(
+        (like) => like.likedBy?.toString() !== req.user.id.toString()
+      )
+
+      console.log('hello', filteredLikes)
+
+      await quote.update({
+        $set: { likes: filteredLikes },
+      })
+
+      res.status(200).json({
+        message: 'Quote un-liked successfully!',
+      })
+      return
+    }
+
+    await quote.update({
+      $push: { likes: { likedBy: req.user.id } },
+    })
+
+    res.status(200).json({
+      message: 'Quote liked successfully!',
     })
   } catch (err) {
     next(err)

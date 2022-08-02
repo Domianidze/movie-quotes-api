@@ -23,6 +23,14 @@ const quoteSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User',
   },
+  likes: [
+    {
+      likedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    },
+  ],
 })
 
 const Quote = mongoose.model('Quote', quoteSchema)
