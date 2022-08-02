@@ -694,7 +694,7 @@ paths:
           content:
             application/json:
               example:
-                message: User not found.
+                message: Movie not found.
               schema:
                 type: object
                 properties:
@@ -736,6 +736,84 @@ paths:
             application/json:
               example:
                 message: Movie not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+  /quote:
+    post:
+      tags:
+        - Quote
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                quoteEn:
+                  type: string
+                quoteGe:
+                  type: string
+                image:
+                  type: file
+                movie:
+                  type: string
+              required:
+              - quoteEn
+              - quoteGe
+              - image
+              - movie
+      responses:
+        '201':
+          description: Quote added successfully!
+          content:
+            application/json:
+              example:
+                message: Quote added successfully!
+                id: 62a48d48d2c36b37241a8f5b
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+                  id:
+                    type: string
+                    required: true
+        '404':
+          description: Movie not found.
+          content:
+            application/json:
+              example:
+                message: Movie not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              example:
+                message: User not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '422':
+          description: Proper image not found.
+          content:
+            application/json:
+              example:
+                message: Proper image not found.
               schema:
                 type: object
                 properties:

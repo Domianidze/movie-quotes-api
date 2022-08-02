@@ -17,6 +17,7 @@ import {
   googleRoutes,
   passwordRecoveryRoutes,
   movieRoutes,
+  quoteRoutes,
 } from 'routes'
 import { getMongoUrl } from 'helpers'
 
@@ -37,6 +38,8 @@ server.use('/google', googleRoutes)
 server.use('/password', passwordRecoveryRoutes)
 
 server.use(authMiddleware, movieRoutes)
+
+server.use(authMiddleware, quoteRoutes)
 
 server.use(errorMiddleware)
 
