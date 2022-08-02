@@ -1,8 +1,10 @@
 import express from 'express'
 
-import { addQuote } from 'controllers'
+import { getQuotes, addQuote } from 'controllers'
 
 const Router = express.Router()
+
+Router.get('/quotes/:page', getQuotes)
 
 Router.post('/quote', addQuote)
 

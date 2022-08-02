@@ -4,6 +4,35 @@ import { User, Movie, Quote } from 'models'
 import { getApiUrl, removeImage, validateId } from 'helpers'
 import { ErrorType } from 'types'
 
+export const getQuotes = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const page = +req.params.page || 0
+    const skip = page * 10
+    const limit = skip + 10
+
+    const quotes = await Quote.find()
+      .select('-__v')
+      .populate({
+        path: 'movie',
+        select: ['-__v', '-createdBy'],
+      })
+      .populate({
+        path: 'createdBy',
+        select: ['username'],
+      })
+      .skip(skip)
+      .limit(limit)
+
+    res.status(200).json(quotes)
+  } catch (err) {
+    next(err)
+  }
+}
+
 export const addQuote = async (
   req: Request,
   res: Response,
