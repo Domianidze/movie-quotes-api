@@ -31,6 +31,18 @@ const quoteSchema = new Schema({
       },
     },
   ],
+  comments: [
+    {
+      comment: {
+        type: String,
+        required: true,
+      },
+      commentedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    },
+  ],
 })
 
 const Quote = mongoose.model('Quote', quoteSchema)

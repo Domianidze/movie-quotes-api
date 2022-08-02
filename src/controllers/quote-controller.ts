@@ -28,6 +28,10 @@ export const getQuotes = async (
         path: 'likes.likedBy',
         select: ['username'],
       })
+      .populate({
+        path: 'comments.commentedBy',
+        select: ['username'],
+      })
       .skip(skip)
       .limit(limit)
 
@@ -252,6 +256,36 @@ export const likeQuote = async (
 
     res.status(200).json({
       message: 'Quote liked successfully!',
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const commentQuote = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    validateId(req.body.id)
+
+    const quote = await Quote.findById(req.body.id)
+
+    if (!quote) {
+      const error: ErrorType = new Error('Quote not found.')
+      error.statusCode = 404
+      throw error
+    }
+
+    await quote.update({
+      $push: {
+        comments: { comment: req.body.comment, commentedBy: req.user.id },
+      },
+    })
+
+    res.status(200).json({
+      message: 'Commented on quote successfully!',
     })
   } catch (err) {
     next(err)

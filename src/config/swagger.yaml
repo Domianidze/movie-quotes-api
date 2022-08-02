@@ -814,7 +814,13 @@ paths:
                       id: 62a86e06451633b832d24238
                       username: testuser
                     likes:
-                      - id: 62a86e06451633b832d24238
+                      - _id: 62a86e06451633b832d24238
+                        likedBy:
+                          id: 62a86e06451633b832d24238
+                          username: testuser
+                    comments:
+                      - _id: 62a86e06451633b832d24238
+                        comment: test comment
                         likedBy:
                           id: 62a86e06451633b832d24238
                           username: testuser
@@ -874,6 +880,9 @@ paths:
                     likes:
                       type: array
                       required: true
+                    comments:
+                      type: array
+                      required: true
   /quote/{id}:
     get:
       tags:
@@ -911,7 +920,13 @@ paths:
                   id: 62a86e06451633b832d24238
                   username: testuser
                 likes:
-                  - id: 62a86e06451633b832d24238
+                  - _id: 62a86e06451633b832d24238
+                    likedBy:
+                      id: 62a86e06451633b832d24238
+                      username: testuser
+                comments:
+                  - _id: 62a86e06451633b832d24238
+                    comment: test comment
                     likedBy:
                       id: 62a86e06451633b832d24238
                       username: testuser
@@ -967,6 +982,9 @@ paths:
                       username: 
                         type: string
                   likes:
+                    type: array
+                    required: true
+                  comments:
                     type: array
                     required: true
         '404':
@@ -1194,6 +1212,49 @@ paths:
             application/json:
               example:
                 message: Quote liked/unliked successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: Quote not found.
+          content:
+            application/json:
+              example:
+                message: Quote not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+  /comment-quote:
+    post:
+      tags:
+        - Quote
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            example:
+                comment: test comment
+                id: 62a86e06451633b832d24238
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  required: true
+      responses:
+        '200':
+          description: Commented on quote successfully!
+          content:
+            application/json:
+              example:
+                message: Commented on quote successfully!
               schema:
                 type: object
                 properties:
