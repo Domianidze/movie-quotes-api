@@ -1,13 +1,65 @@
 import { Request, Response, NextFunction } from 'express'
 
-import { User, Movie, Quote } from 'models'
 import {
   postQuoteSchema,
   putQuoteSchema,
   postQuoteCommentSchema,
 } from 'schemas'
+import { User, Movie, Quote } from 'models'
+import { quotePopulateQuery } from 'querys'
 import { getApiUrl, removeImage, validateId } from 'helpers'
 import { ErrorType } from 'types'
+
+export const searchQuotes = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { query } = req.params
+
+    const findByQuotes = async () => {
+      const data = await Quote.find({ $text: { $search: query } })
+        .select('-__v')
+        .populate(quotePopulateQuery)
+
+      return data
+    }
+
+    const findByMovies = async () => {
+      const movies = await Movie.find({ $text: { $search: query } })
+
+      const movieIds = movies.map((movie) => movie._id.toString())
+
+      const data = await Quote.find({ movie: { $in: movieIds } })
+        .select('-__v')
+        .populate(quotePopulateQuery)
+
+      return data
+    }
+
+    let quotes
+
+    if (query.startsWith('@')) {
+      quotes = await findByQuotes()
+    }
+
+    if (query.startsWith('#')) {
+      quotes = await findByMovies()
+    }
+
+    if (!quotes) {
+      const byQuotes = await findByQuotes()
+      const byMovies = await findByMovies()
+
+      quotes = [...byQuotes, ...byMovies]
+    }
+
+    res.status(200).json(quotes)
+  } catch (err) {
+    next(err)
+  }
+}
 
 export const getQuotes = async (
   req: Request,
@@ -21,22 +73,7 @@ export const getQuotes = async (
 
     const quotes = await Quote.find()
       .select('-__v')
-      .populate({
-        path: 'movie',
-        select: ['-__v', '-createdBy'],
-      })
-      .populate({
-        path: 'createdBy',
-        select: ['username'],
-      })
-      .populate({
-        path: 'likes.likedBy',
-        select: ['username'],
-      })
-      .populate({
-        path: 'comments.commentedBy',
-        select: ['username'],
-      })
+      .populate(quotePopulateQuery)
       .skip(skip)
       .limit(limit)
 
@@ -56,18 +93,7 @@ export const getQuote = async (
 
     const quote = await Quote.findById(req.params.id)
       .select('-__v')
-      .populate({
-        path: 'movie',
-        select: ['-__v', '-createdBy'],
-      })
-      .populate({
-        path: 'createdBy',
-        select: ['username'],
-      })
-      .populate({
-        path: 'likes.likedBy',
-        select: ['username'],
-      })
+      .populate(quotePopulateQuery)
 
     if (!quote) {
       const error: ErrorType = new Error('Quote not found.')

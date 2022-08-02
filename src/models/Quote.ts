@@ -45,6 +45,8 @@ const quoteSchema = new Schema({
   ],
 })
 
+quoteSchema.index({ '$**': 'text' })
+
 const Quote = mongoose.model('Quote', quoteSchema)
 
 export default Quote

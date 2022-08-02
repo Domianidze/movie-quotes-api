@@ -1,6 +1,7 @@
 import express from 'express'
 
 import {
+  searchQuotes,
   getQuotes,
   getQuote,
   addQuote,
@@ -12,6 +13,8 @@ import {
 } from 'controllers'
 
 const Router = express.Router()
+
+Router.get('/search-quotes/:query', searchQuotes)
 
 Router.get('/quotes/:page', getQuotes)
 

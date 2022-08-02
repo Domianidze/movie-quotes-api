@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
 
-import { User, Movie } from 'models'
 import { postMovieSchema, putMovieSchema } from 'schemas'
+import { User, Movie } from 'models'
+import { moviePopulateQuery } from 'querys'
 import { getApiUrl, removeImage, validateId } from 'helpers'
 import { ErrorType } from 'types'
 
@@ -13,10 +14,7 @@ export const getMovies = async (
   try {
     const movies = await Movie.find()
       .select('-__v')
-      .populate({
-        path: 'createdBy',
-        select: ['username'],
-      })
+      .populate(moviePopulateQuery)
 
     res.status(200).json(movies)
   } catch (err) {
@@ -34,10 +32,7 @@ export const getMovie = async (
 
     const movie = await Movie.findById(req.params.id)
       .select('-__v')
-      .populate({
-        path: 'createdBy',
-        select: ['username'],
-      })
+      .populate(moviePopulateQuery)
 
     if (!movie) {
       const error: ErrorType = new Error('Movie not found.')
