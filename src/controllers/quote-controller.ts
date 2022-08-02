@@ -118,3 +118,50 @@ export const addQuote = async (
     next(err)
   }
 }
+
+export const editQuote = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    validateId(req.body.id)
+
+    const quote = await Quote.findById(req.body.id)
+
+    if (!quote || !quote.createdBy) {
+      const error: ErrorType = new Error('Quote not found.')
+      error.statusCode = 404
+      throw error
+    }
+
+    if (req.user.id.toString() !== quote.createdBy.toString()) {
+      const error: ErrorType = new Error('Not authorized.')
+      error.statusCode = 401
+      throw error
+    }
+
+    const image = req.file
+
+    const data = {
+      ...req.body,
+      ...(image && { image: `${getApiUrl()}/${image.path}` }),
+    }
+
+    await quote.update(data)
+
+    if (image) {
+      removeImage(quote.image)
+    }
+
+    res.status(200).json({
+      message: 'Quote edited successfully!',
+    })
+  } catch (err) {
+    if (req.file) {
+      removeImage(req.file.path)
+    }
+
+    next(err)
+  }
+}

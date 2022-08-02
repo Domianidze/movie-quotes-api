@@ -701,6 +701,18 @@ paths:
                   message:
                     type: string
                     required: true
+        '401':
+          description: Not authorized.
+          content:
+            application/json:
+              example:
+                message: Not authorized.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
         '404':
           description: Movie not found.
           content:
@@ -1013,6 +1025,64 @@ paths:
             application/json:
               example:
                 message: Proper image not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+    put:
+      tags:
+        - Quote
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                quoteEn:
+                  type: string
+                quoteGe:
+                  type: string
+                image:
+                  type: file
+              required:
+                - id
+      responses:
+        '200':
+          description: Quote updated successfully!
+          content:
+            application/json:
+              example:
+                message: Quote updated successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '401':
+          description: Not authorized.
+          content:
+            application/json:
+              example:
+                message: Not authorized.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: Quote not found.
+          content:
+            application/json:
+              example:
+                message: Quote not found.
               schema:
                 type: object
                 properties:
