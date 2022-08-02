@@ -1,6 +1,11 @@
 import { Request, Response, NextFunction } from 'express'
 
 import { User, Movie, Quote } from 'models'
+import {
+  postQuoteSchema,
+  putQuoteSchema,
+  postQuoteCommentSchema,
+} from 'schemas'
 import { getApiUrl, removeImage, validateId } from 'helpers'
 import { ErrorType } from 'types'
 
@@ -82,6 +87,8 @@ export const addQuote = async (
   next: NextFunction
 ) => {
   try {
+    await postQuoteSchema.validateAsync(req.body)
+
     const movieId = req.body.movie
     const createdBy = req.user.id
 
@@ -138,6 +145,8 @@ export const editQuote = async (
   next: NextFunction
 ) => {
   try {
+    await putQuoteSchema.validateAsync(req.body)
+
     validateId(req.body.id)
 
     const quote = await Quote.findById(req.body.id)
@@ -266,6 +275,8 @@ export const postQuoteComment = async (
   next: NextFunction
 ) => {
   try {
+    await postQuoteCommentSchema.validateAsync(req.body)
+
     validateId(req.body.id)
 
     const quote = await Quote.findById(req.body.id)

@@ -9,4 +9,4 @@ export default Joi.object({
   directorGe: Joi.string().regex(/^[ა-ჰ0-9 .,!?'„“():/]*$/),
   descriptionEn: Joi.string().regex(/^[a-zA-Z0-9 .,!?'„“():/]*$/),
   descriptionGe: Joi.string().regex(/^[ა-ჰ0-9 .,!?'„“():/]*$/),
-}).min(2)
+})
