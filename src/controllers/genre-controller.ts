@@ -3,6 +3,20 @@ import { Request, Response, NextFunction } from 'express'
 import { Genre } from 'models'
 import { ErrorType } from 'types'
 
+export const getGenres = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const genres = await Genre.find({ createdBy: req.user.id }).select('-__v')
+
+    res.status(200).json(genres)
+  } catch (err) {
+    next(err)
+  }
+}
+
 export const addGenre = async (
   req: Request,
   res: Response,

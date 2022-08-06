@@ -1,8 +1,10 @@
 import express from 'express'
 
-import { addGenre } from 'controllers'
+import { getGenres, addGenre } from 'controllers'
 
 const Router = express.Router()
+
+Router.get('/genres', getGenres)
 
 Router.post('/genre', addGenre)
 
