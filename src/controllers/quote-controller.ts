@@ -246,7 +246,7 @@ export const deleteQuote = async (
 
     if (movie) {
       const filteredMovieQuotes = movie.quotes.filter(
-        (movieQuote: any) => movieQuote.data !== quote._id
+        (movieQuote) => movieQuote.data !== quote._id
       )
 
       await movie.updateOne({
