@@ -11,7 +11,7 @@ const movieSchema = new Schema({
     type: String,
     required: true,
   },
-  tags: {
+  genres: {
     type: String,
     required: true,
   },
@@ -39,6 +39,14 @@ const movieSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User',
   },
+  quotes: [
+    {
+      data: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Quote',
+      },
+    },
+  ],
 })
 
 movieSchema.index({ '$**': 'text' })

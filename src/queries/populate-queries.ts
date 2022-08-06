@@ -4,11 +4,11 @@ export const quotePopulateQuery = [
     select: ['-__v', '-createdBy'],
   },
   {
-    path: 'likes.likedBy',
+    path: 'createdBy',
     select: ['username'],
   },
   {
-    path: 'createdBy',
+    path: 'likes.likedBy',
     select: ['username'],
   },
   {
@@ -21,5 +21,9 @@ export const moviePopulateQuery = [
   {
     path: 'createdBy',
     select: ['username'],
+  },
+  {
+    path: 'quotes.data',
+    select: ['-__v', '-movie', '-createdBy'],
   },
 ]

@@ -444,7 +444,7 @@ paths:
                   - _id: 62a86e06451633b832d24238
                     nameEn: Interstellar
                     nameGe: ინტერსტელარი
-                    tags:
+                    genres:
                       - drama
                     directorEn: Christopher Nolan
                     directorGe: კრისტოფერ ნოლანი
@@ -454,6 +454,17 @@ paths:
                     createdBy: 
                       id: 62a86e06451633b832d24238
                       username: testuser
+                    quotes:
+                      - _id: 62a86e06451633b832d24238
+                        quoteEn: You have to leave something behind to go forward
+                        quoteGe: წინ წასასვლელად რაღაც უნდა დატოვო
+                        image: http://localhost:8080/storage\img\2022-08-01T11-02-23.061Z-interstellar.png
+                        createdBy: 
+                          id: 62a86e06451633b832d24238
+                        likes:
+                          - _id: 62a86e06451633b832d24238
+                        comments:
+                          - _id: 62a86e06451633b832d24238
               schema:
                 type: array
                 items:
@@ -468,7 +479,7 @@ paths:
                     nameGe:
                       type: string
                       required: true
-                    tags:
+                    genres:
                       type: array
                       required: true
                     directorEn:
@@ -494,6 +505,9 @@ paths:
                           type: string
                         username: 
                           type: string
+                    quotes:
+                      type: array
+                      required: true
   /movie/{id}:
     get:
       tags:
@@ -515,8 +529,7 @@ paths:
                   _id: 62a86e06451633b832d24238
                   nameEn: Interstellar
                   nameGe: ინტერსტელარი
-                  tags:
-                    - drama
+                  genres: drama, sci-fi
                   directorEn: Christopher Nolan
                   directorGe: კრისტოფერ ნოლანი
                   descriptionEn: When Earth becomes uninhabitable in the future, a farmer and ex-NASA pilot, Joseph Cooper, is tasked to pilot a spacecraft, along with a team of researchers, to find a new planet for humans.
@@ -525,6 +538,17 @@ paths:
                   createdBy: 
                     id: 62a86e06451633b832d24238
                     username: testuser
+                  quotes:
+                    - _id: 62a86e06451633b832d24238
+                      quoteEn: You have to leave something behind to go forward
+                      quoteGe: წინ წასასვლელად რაღაც უნდა დატოვო
+                      image: http://localhost:8080/storage\img\2022-08-01T11-02-23.061Z-interstellar.png
+                      createdBy: 
+                        id: 62a86e06451633b832d24238
+                      likes:
+                        - _id: 62a86e06451633b832d24238
+                      comments:
+                        - _id: 62a86e06451633b832d24238
               schema:
                 type: object
                 properties:
@@ -537,8 +561,8 @@ paths:
                   nameGe:
                     type: string
                     required: true
-                  tags:
-                    type: array
+                  genres:
+                    type: string
                     required: true
                   directorEn:
                     type: string
@@ -563,6 +587,9 @@ paths:
                         type: string
                       username: 
                         type: string
+                    quotes:
+                      type: array
+                      required: true
         '404':
           description: Movie not found.
           content:
@@ -591,10 +618,8 @@ paths:
                   type: string
                 nameGe:
                   type: string
-                tags:
-                  type: array
-                  items:
-                    type: string
+                genres:
+                  type: string
                 directorEn:
                   type: string
                 directorGe:
@@ -608,7 +633,7 @@ paths:
               required:
               - nameEn
               - nameGe
-              - tags
+              - genres
               - directorEn
               - directorGe
               - descriptionEn
@@ -672,10 +697,8 @@ paths:
                   type: string
                 nameGe:
                   type: string
-                tags:
+                genres:
                   type: array
-                  items:
-                    type: string
                 directorEn:
                   type: string
                 directorGe:
@@ -803,8 +826,7 @@ paths:
                       _id: 62a86e06451633b832d24238
                       nameEn: Interstellar
                       nameGe: ინტერსტელარი
-                      tags:
-                        - drama
+                      genres: 'drama, sci-fi'
                       directorEn: Christopher Nolan
                       directorGe: კრისტოფერ ნოლანი
                       descriptionEn: When Earth becomes uninhabitable in the future, a farmer and ex-NASA pilot, Joseph Cooper, is tasked to pilot a spacecraft, along with a team of researchers, to find a new planet for humans.
@@ -821,7 +843,7 @@ paths:
                     comments:
                       - _id: 62a86e06451633b832d24238
                         comment: test comment
-                        likedBy:
+                        commentedBy:
                           id: 62a86e06451633b832d24238
                           username: testuser
               schema:
@@ -851,9 +873,8 @@ paths:
                         nameGe:
                           type: string
                           required: true
-                        tags:
+                        genres:
                           type: array
-                          required: true
                         directorEn:
                           type: string
                           required: true
@@ -908,8 +929,7 @@ paths:
                       _id: 62a86e06451633b832d24238
                       nameEn: Interstellar
                       nameGe: ინტერსტელარი
-                      tags:
-                        - drama
+                      genres: 'drama, sci-fi'
                       directorEn: Christopher Nolan
                       directorGe: კრისტოფერ ნოლანი
                       descriptionEn: When Earth becomes uninhabitable in the future, a farmer and ex-NASA pilot, Joseph Cooper, is tasked to pilot a spacecraft, along with a team of researchers, to find a new planet for humans.
@@ -926,7 +946,7 @@ paths:
                     comments:
                       - _id: 62a86e06451633b832d24238
                         comment: test comment
-                        likedBy:
+                        commentedBy:
                           id: 62a86e06451633b832d24238
                           username: testuser
               schema:
@@ -956,9 +976,8 @@ paths:
                         nameGe:
                           type: string
                           required: true
-                        tags:
-                          type: array
-                          required: true
+                        genres:
+                          type: string
                         directorEn:
                           type: string
                           required: true
@@ -1014,8 +1033,7 @@ paths:
                   _id: 62a86e06451633b832d24238
                   nameEn: Interstellar
                   nameGe: ინტერსტელარი
-                  tags:
-                    - drama
+                  genres: 'drama, sci-fi'
                   directorEn: Christopher Nolan
                   directorGe: კრისტოფერ ნოლანი
                   descriptionEn: When Earth becomes uninhabitable in the future, a farmer and ex-NASA pilot, Joseph Cooper, is tasked to pilot a spacecraft, along with a team of researchers, to find a new planet for humans.
@@ -1032,7 +1050,7 @@ paths:
                 comments:
                   - _id: 62a86e06451633b832d24238
                     comment: test comment
-                    likedBy:
+                    commentedBy:
                       id: 62a86e06451633b832d24238
                       username: testuser
               schema:
@@ -1060,9 +1078,8 @@ paths:
                       nameGe:
                         type: string
                         required: true
-                      tags:
-                        type: array
-                        required: true
+                      genres:
+                        type: string
                       directorEn:
                         type: string
                         required: true
