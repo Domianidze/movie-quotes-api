@@ -9,8 +9,6 @@ const genreSchema = new Schema({
   },
 })
 
-genreSchema.index({ '$**': 'text' })
-
 const Genre = mongoose.model('Genre', genreSchema)
 
 export default Genre

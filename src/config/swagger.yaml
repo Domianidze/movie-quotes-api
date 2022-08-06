@@ -1455,3 +1455,49 @@ paths:
                   message:
                     type: string
                     required: true
+  /genre:
+    post:
+      tags:
+        - Genre
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            example:
+                genre: Drama
+            schema:
+              type: object
+              properties:
+                Genre:
+                  type: string
+                  required: true
+      responses:
+        '201':
+          description: Genre added successfully!
+          content:
+            application/json:
+              example:
+                message: Genre added successfully!
+                id: 62a48d48d2c36b37241a8f5b
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+                  id:
+                    type: string
+                    required: true
+        '409':
+          description: Genre with this name already exists
+          content:
+            application/json:
+              example:
+                message: Genre with this name already exists
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
