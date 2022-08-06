@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 
+import { postGenreSchema } from 'schemas'
 import { Genre } from 'models'
 import { validateId } from 'helpers'
 import { ErrorType } from 'types'
@@ -24,6 +25,8 @@ export const addGenre = async (
   next: NextFunction
 ) => {
   try {
+    await postGenreSchema.validateAsync(req.body)
+
     const { genre }: { genre: string } = req.body
     const formattedGenre = `${genre.charAt(0).toUpperCase()}${genre.slice(1)}`
 
