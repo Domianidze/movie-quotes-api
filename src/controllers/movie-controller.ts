@@ -7,12 +7,14 @@ import { getApiUrl, removeImage, validateId } from 'helpers'
 import { ErrorType } from 'types'
 
 export const getMovies = async (
-  _: Request,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const movies = await Movie.find()
+    validateId(req.user.id)
+
+    const movies = await Movie.find({ createdBy: req.user.id })
       .select('-__v')
       .populate(moviePopulateQuery)
 
@@ -76,6 +78,7 @@ export const addMovie = async (
       ...req.body,
       image: `${getApiUrl()}/${req.file.path}`,
       createdBy,
+      quotes: [],
     }
 
     const response = await Movie.create(movie)

@@ -152,6 +152,12 @@ export const addQuote = async (
 
     const response = await Quote.create(quote)
 
+    await movie.updateOne({
+      $push: {
+        quotes: { data: response._id },
+      },
+    })
+
     res.status(201).json({
       message: 'Quote added successfully!',
       id: response._id,
@@ -196,7 +202,7 @@ export const editQuote = async (
       ...(image && { image: `${getApiUrl()}/${image.path}` }),
     }
 
-    await quote.update(data)
+    await quote.updateOne(data)
 
     if (image) {
       removeImage(quote.image)
@@ -236,6 +242,18 @@ export const deleteQuote = async (
       throw error
     }
 
+    const movie = await Movie.findOne({ _id: quote.movie })
+
+    if (movie) {
+      const filteredMovieQuotes = movie.quotes.filter(
+        (movieQuote) => movieQuote.data !== quote._id
+      )
+
+      await movie.updateOne({
+        $set: { quotes: filteredMovieQuotes },
+      })
+    }
+
     await quote.remove()
 
     removeImage(quote.image)
@@ -273,7 +291,7 @@ export const likeQuote = async (
         (like) => like.likedBy?.toString() !== req.user.id.toString()
       )
 
-      await quote.update({
+      await quote.updateOne({
         $set: { likes: filteredLikes },
       })
 
@@ -283,7 +301,7 @@ export const likeQuote = async (
       return
     }
 
-    await quote.update({
+    await quote.updateOne({
       $push: { likes: { likedBy: req.user.id } },
     })
 
@@ -313,7 +331,7 @@ export const postQuoteComment = async (
       throw error
     }
 
-    await quote.update({
+    await quote.updateOne({
       $push: {
         comments: { comment: req.body.comment, commentedBy: req.user.id },
       },
@@ -364,7 +382,7 @@ export const deleteQuoteComment = async (
       (comment: any) => comment._id.toString() !== req.body.id.toString()
     )
 
-    await quote.update({
+    await quote.updateOne({
       $set: { comments: filteredComments },
     })
 

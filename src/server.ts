@@ -18,6 +18,7 @@ import {
   passwordRecoveryRoutes,
   movieRoutes,
   quoteRoutes,
+  genreRoutes,
 } from 'routes'
 import { getMongoUrl } from 'helpers'
 
@@ -40,6 +41,8 @@ server.use('/password', passwordRecoveryRoutes)
 server.use(authMiddleware, movieRoutes)
 
 server.use(authMiddleware, quoteRoutes)
+
+server.use(authMiddleware, genreRoutes)
 
 server.use(errorMiddleware)
 

@@ -4,9 +4,9 @@
   "description": "",
   "main": "build/server.ts",
   "scripts": {
-    "start": "node build/server.js",
     "build:watch": "babel src --out-dir build --extensions .ts --copy-files --watch",
     "build:prod": "babel src --out-dir build --extensions .ts --copy-files --minified",
+    "start": "node build/server.js",
     "dev": "concurrently \"npm run build:watch\" \"nodemon build/server.js\""
   },
   "repository": {
