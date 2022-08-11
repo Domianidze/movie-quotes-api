@@ -1,3 +1,5 @@
+import { getIo } from 'socket'
+
 import { Notification } from 'models'
 
 const sendNotification = async (
@@ -22,6 +24,11 @@ const sendNotification = async (
     quote,
     to,
     from,
+  })
+
+  getIo().emit('notifications', {
+    message: 'new-notification',
+    to,
   })
 }
 

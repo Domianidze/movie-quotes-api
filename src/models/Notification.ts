@@ -9,7 +9,7 @@ const notificationSchema = new Schema({
     required: true,
   },
   read: { type: Boolean, default: false },
-  date: { type: Date, default: Date.now() },
+  date: { type: Date, default: new Date() },
   quote: {
     type: Schema.Types.ObjectId,
     ref: 'Quote',

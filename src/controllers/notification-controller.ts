@@ -16,6 +16,7 @@ export const getNotifications = async (
       .select('-__v -to')
       .populate('quote from')
       .sort({ _id: -1 })
+      .limit(20)
 
     res.status(200).json(notification)
   } catch (err) {
