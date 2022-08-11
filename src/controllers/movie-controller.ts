@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 
 import { postMovieSchema, putMovieSchema } from 'schemas'
-import { User, Movie } from 'models'
+import { User, Movie, Quote } from 'models'
 import { moviePopulateQuery } from 'queries'
 import { getApiUrl, removeImage, validateId } from 'helpers'
 import { ErrorType } from 'types'
@@ -17,6 +17,7 @@ export const getMovies = async (
     const movies = await Movie.find({ createdBy: req.user.id })
       .select('-__v')
       .populate(moviePopulateQuery)
+      .sort({ _id: -1 })
 
     res.status(200).json(movies)
   } catch (err) {
@@ -170,6 +171,8 @@ export const deleteMovie = async (
     await movie.remove()
 
     removeImage(movie.image)
+
+    Quote.deleteMany({ movie: movie._id })
 
     res.status(200).json({
       message: 'Movie deleted successfully!',

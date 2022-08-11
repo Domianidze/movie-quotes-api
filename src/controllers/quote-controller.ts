@@ -22,6 +22,7 @@ export const searchQuotes = async (
       const data = await Quote.find({ $text: { $search: query } })
         .select('-__v')
         .populate(quotePopulateQuery)
+        .sort({ _id: -1 })
 
       return data
     }
@@ -29,11 +30,12 @@ export const searchQuotes = async (
     const findByMovies = async () => {
       const movies = await Movie.find({ $text: { $search: query } })
 
-      const movieIds = movies.map((movie) => movie._id.toString())
+      const movieIds: string[] = movies.map((movie) => movie._id.toString())
 
       const data = await Quote.find({ movie: { $in: movieIds } })
         .select('-__v')
         .populate(quotePopulateQuery)
+        .sort({ _id: -1 })
 
       return data
     }
@@ -44,7 +46,7 @@ export const searchQuotes = async (
       quotes = await findByQuotes()
     }
 
-    if (query.startsWith('#')) {
+    if (query.startsWith('&')) {
       quotes = await findByMovies()
     }
 
@@ -74,6 +76,7 @@ export const getQuotes = async (
     const quotes = await Quote.find()
       .select('-__v')
       .populate(quotePopulateQuery)
+      .sort({ _id: -1 })
       .skip(skip)
       .limit(limit)
 
@@ -246,7 +249,7 @@ export const deleteQuote = async (
 
     if (movie) {
       const filteredMovieQuotes = movie.quotes.filter(
-        (movieQuote) => movieQuote.data !== quote._id
+        (movieQuote) => movieQuote.data?.toString() !== quote._id.toString()
       )
 
       await movie.updateOne({
