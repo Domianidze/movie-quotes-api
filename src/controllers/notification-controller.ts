@@ -14,6 +14,7 @@ export const getNotifications = async (
 
     const notification = await Notification.find({ to: req.user.id })
       .select('-__v -to')
+      .populate('quote from')
       .sort({ _id: -1 })
 
     res.status(200).json(notification)

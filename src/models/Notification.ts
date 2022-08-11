@@ -18,7 +18,7 @@ const notificationSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User',
   },
-  by: {
+  from: {
     type: Schema.Types.ObjectId,
     ref: 'User',
   },
