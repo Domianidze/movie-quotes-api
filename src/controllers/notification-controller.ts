@@ -54,3 +54,21 @@ export const readNotification = async (
     next(err)
   }
 }
+
+export const readAllNotifications = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    validateId(req.user.id)
+
+    await Notification.updateMany({ to: req.user.id }, { read: true })
+
+    res.status(200).json({
+      message: 'All notifications read successfully!',
+    })
+  } catch (err) {
+    next(err)
+  }
+}
