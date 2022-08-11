@@ -19,6 +19,7 @@ import {
   movieRoutes,
   quoteRoutes,
   genreRoutes,
+  notificationRoutes,
 } from 'routes'
 import { getMongoUrl } from 'helpers'
 
@@ -43,6 +44,8 @@ server.use(authMiddleware, movieRoutes)
 server.use(authMiddleware, quoteRoutes)
 
 server.use(authMiddleware, genreRoutes)
+
+server.use(authMiddleware, notificationRoutes)
 
 server.use(errorMiddleware)
 
