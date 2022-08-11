@@ -1607,3 +1607,57 @@ paths:
                     from:
                       type: string
                       required: true
+  /read-notification:
+    put:
+      tags:
+        - Notifications
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            example:
+                id: 62a86e06451633b832d24238
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  required: true
+      responses:
+        '200':
+          description: Read notification successfully!
+          content:
+            application/json:
+              example:
+                message: Notification read successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '401':
+          description: Not authorized.
+          content:
+            application/json:
+              example:
+                message: Not authorized.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: Notification not found.
+          content:
+            application/json:
+              example:
+                message: Notification not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
