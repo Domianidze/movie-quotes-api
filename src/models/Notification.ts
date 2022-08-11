@@ -10,6 +10,10 @@ const notificationSchema = new Schema({
   },
   read: { type: Boolean, default: false },
   date: { type: Date, default: Date.now() },
+  quote: {
+    type: Schema.Types.ObjectId,
+    ref: 'Quote',
+  },
   to: {
     type: Schema.Types.ObjectId,
     ref: 'User',

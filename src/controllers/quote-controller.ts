@@ -7,7 +7,7 @@ import {
 } from 'schemas'
 import { User, Movie, Quote } from 'models'
 import { quotePopulateQuery } from 'queries'
-import { getApiUrl, removeImage, validateId } from 'helpers'
+import { getApiUrl, removeImage, validateId, sendNotification } from 'helpers'
 import { ErrorType } from 'types'
 
 export const searchQuotes = async (
@@ -308,6 +308,13 @@ export const likeQuote = async (
       $push: { likes: { likedBy: req.user.id } },
     })
 
+    await sendNotification(
+      'reacted',
+      quote._id.toString(),
+      quote.createdBy?.toString(),
+      req.user.id
+    )
+
     res.status(200).json({
       message: 'Quote liked successfully!',
     })
@@ -339,6 +346,13 @@ export const postQuoteComment = async (
         comments: { comment: req.body.comment, commentedBy: req.user.id },
       },
     })
+
+    await sendNotification(
+      'commented',
+      quote._id.toString(),
+      quote.createdBy?.toString(),
+      req.user.id
+    )
 
     res.status(200).json({
       message: 'Commented on quote successfully!',
