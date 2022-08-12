@@ -1771,7 +1771,7 @@ paths:
                   message:
                     type: string
                     required: true
-  /add-email:
+  /email:
     post:
       tags:
         - User
@@ -1910,6 +1910,48 @@ paths:
             application/json:
               example:
                 message: User/Email not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+  /email:
+    delete:
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            example:
+                email: testuser123@gmail.com
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  required: true
+      responses:
+        '200':
+          description: Email deleted successfully!
+          content:
+            application/json:
+              example:
+                message: Email deleted successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              example:
+                message: User not found.
               schema:
                 type: object
                 properties:

@@ -216,3 +216,35 @@ export const setPrimaryEmail = async (
     next(err)
   }
 }
+
+export const deleteEmail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    validateId(req.user.id)
+
+    const user = await User.findById(req.user.id)
+
+    if (!user || user.googleUser) {
+      const error: ErrorType = new Error('User not found.')
+      error.statusCode = 404
+      throw error
+    }
+
+    const emails = user.emails.filter((data) => data.email !== req.body.email)
+
+    await user.updateOne({
+      $set: {
+        emails,
+      },
+    })
+
+    res.status(200).json({
+      message: 'Email deleted successfully!',
+    })
+  } catch (err) {
+    next(err)
+  }
+}
