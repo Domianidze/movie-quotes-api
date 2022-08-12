@@ -1958,3 +1958,45 @@ paths:
                   message:
                     type: string
                     required: true
+  /password:
+    put:
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            example:
+                password: testuser456
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  required: true
+      responses:
+        '200':
+          description: Password edited successfully!
+          content:
+            application/json:
+              example:
+                message: Password edited successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              example:
+                message: User not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true

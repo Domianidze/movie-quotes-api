@@ -7,6 +7,7 @@ import {
   activateEmail,
   setPrimaryEmail,
   deleteEmail,
+  changePassword,
 } from 'controllers'
 
 const Router = express.Router()
@@ -22,5 +23,7 @@ Router.put('/activate-email', activateEmail)
 Router.put('/set-primary-email', setPrimaryEmail)
 
 Router.delete('/email', deleteEmail)
+
+Router.put('/password', changePassword)
 
 export default Router

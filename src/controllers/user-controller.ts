@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
+import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 import { User } from 'models'
@@ -243,6 +244,38 @@ export const deleteEmail = async (
 
     res.status(200).json({
       message: 'Email deleted successfully!',
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const changePassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    validateId(req.user.id)
+
+    const user = await User.findById(req.user.id)
+
+    if (!user || user.googleUser) {
+      const error: ErrorType = new Error('User not found.')
+      error.statusCode = 404
+      throw error
+    }
+
+    const hashedPassword = await bcrypt.hash(req.body.password, 12)
+
+    await user.updateOne({
+      $set: {
+        password: hashedPassword,
+      },
+    })
+
+    res.status(200).json({
+      message: 'Password changed successfully!',
     })
   } catch (err) {
     next(err)
