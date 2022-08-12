@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
+import jwt from 'jsonwebtoken'
 
 import { User } from 'models'
+import { sendActivateEmail } from 'mail'
 import { validateId, getApiUrl, getDefaultPhoto, removeImage } from 'helpers'
 import { ErrorType } from 'types'
 
@@ -63,6 +65,67 @@ export const editUser = async (
       removeImage(req.file.path)
     }
 
+    next(err)
+  }
+}
+
+export const addEmail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    validateId(req.user.id)
+
+    const existingUser =
+      (await User.findOne({ email: req.body.email })) ||
+      (await User.findOne({ emails: { email: req.body.email } }))
+
+    if (existingUser) {
+      const error: ErrorType = new Error('Email is already taken.')
+      error.statusCode = 422
+      throw error
+    }
+
+    const user = await User.findById(req.user.id)
+
+    if (!user || user.googleUser) {
+      const error: ErrorType = new Error('User not found.')
+      error.statusCode = 404
+      throw error
+    }
+
+    await user.updateOne({
+      $push: { emails: { email: req.body.email, activated: false } },
+    })
+
+    if (!process.env.EMAIL_SECRET) {
+      throw new Error('JWT secret missing.')
+    }
+
+    const confirmToken = jwt.sign(
+      {
+        id: user._id,
+        email: req.body.email,
+      },
+      process.env.EMAIL_SECRET,
+      {
+        expiresIn: process.env.EMAIL_EXPIRES_IN,
+      }
+    )
+
+    await sendActivateEmail(
+      req.body.email,
+      confirmToken,
+      user.username,
+      req.body.redirectOnConfirm,
+      req.body.language
+    )
+
+    res.status(201).json({
+      message: 'Email added successfully!',
+    })
+  } catch (err) {
     next(err)
   }
 }

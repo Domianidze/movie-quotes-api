@@ -1771,3 +1771,64 @@ paths:
                   message:
                     type: string
                     required: true
+  /add-email:
+    post:
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            example:
+                email: testuser@gmail.com
+                redirectOnConfirm: http://localhost:3000/activate-email
+                language: en
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  required: true
+                redirectOnConfirm:
+                  type: string
+                  required: true
+                language:
+                  type: string
+      responses:
+        '201':
+          description: Email added successfully!
+          content:
+            application/json:
+              example:
+                message: Email added successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              example:
+                message: User not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '422':
+          description: Email is already taken.
+          content:
+            application/json:
+              example:
+                message: Email is already taken.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true

@@ -82,3 +82,32 @@ export const sendPasswordRecoveryEmail = async (
     attachments
   )
 }
+
+export const sendActivateEmail = async (
+  to: string,
+  token: string,
+  username: string,
+  backLink: string,
+  locale: string
+) => {
+  const context = {
+    username,
+    link: `${backLink}/${token}`,
+  }
+
+  const attachments = [
+    {
+      filename: 'email-icon',
+      path: path.join(`${__dirname}/views/icons/email-icon.png`),
+      cid: 'email-icon',
+    },
+  ]
+
+  return sendMail(
+    to,
+    'Activate Email',
+    `activate-email-${locale || 'en'}`,
+    context,
+    attachments
+  )
+}

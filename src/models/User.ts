@@ -24,6 +24,12 @@ const userSchema = new Schema({
   googleUser: {
     type: Boolean,
   },
+  emails: [
+    {
+      email: String,
+      activated: Boolean,
+    },
+  ],
 })
 
 const User = mongoose.model('User', userSchema)
