@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 import { User } from 'models'
+import { putUserSchema, postEmailSchema, putPasswordSchema } from 'schemas'
 import { sendActivateEmail } from 'mail'
 import { validateId, getApiUrl, getDefaultPhoto, removeImage } from 'helpers'
 import { ErrorType, JwtPayloadType } from 'types'
@@ -35,6 +36,8 @@ export const editUser = async (
   next: NextFunction
 ) => {
   try {
+    await putUserSchema.validateAsync(req.body)
+
     validateId(req.user.id)
 
     const user = await User.findById(req.user.id)
@@ -76,6 +79,8 @@ export const addEmail = async (
   next: NextFunction
 ) => {
   try {
+    await postEmailSchema.validateAsync(req.body)
+
     validateId(req.user.id)
 
     const existingUser =
@@ -256,6 +261,8 @@ export const changePassword = async (
   next: NextFunction
 ) => {
   try {
+    await putPasswordSchema.validateAsync(req.body)
+
     validateId(req.user.id)
 
     const user = await User.findById(req.user.id)
