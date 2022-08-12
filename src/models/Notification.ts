@@ -8,8 +8,14 @@ const notificationSchema = new Schema({
     enum: ['commented', 'reacted'],
     required: true,
   },
-  read: { type: Boolean, default: false },
-  date: { type: Date, default: new Date() },
+  read: {
+    type: Boolean,
+    default: false,
+  },
+  date: {
+    type: Date,
+    required: true,
+  },
   quote: {
     type: Schema.Types.ObjectId,
     ref: 'Quote',

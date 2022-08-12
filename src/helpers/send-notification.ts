@@ -22,6 +22,7 @@ const sendNotification = async (
   await Notification.create({
     notification,
     quote,
+    date: new Date(),
     to,
     from,
   })

@@ -31,6 +31,7 @@ app.use(cors())
 app.use(bodyParser.json())
 
 app.use(multerMiddleware)
+app.use('/public', express.static(path.join('public')))
 app.use('/storage', express.static(path.join('storage')))
 
 app.use('/api-docs', SwaggerUI.serve, swaggerMiddleware())

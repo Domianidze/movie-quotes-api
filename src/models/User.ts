@@ -3,6 +3,10 @@ import mongoose from 'mongoose'
 const { Schema } = mongoose
 
 const userSchema = new Schema({
+  photo: {
+    type: String,
+    required: true,
+  },
   username: {
     type: String,
     required: true,
