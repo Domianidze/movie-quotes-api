@@ -1686,4 +1686,47 @@ paths:
                   message:
                     type: string
                     required: true
+  /user:
+    get:
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Get user successfully!
+          content:
+            application/json:
+              example:
+                  _id: 62a86e06451633b832d24238
+                  photo: http://localhost:8080/public/img/default-photo.png
+                  username: testuser
+                  email: testuser@gmail.com
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    required: true
+                  photo:
+                    type: string
+                    required: true
+                  username:
+                    type: string
+                    required: true
+                  email:
+                    type: string
+                    required: true
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              example:
+                message: User not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
 

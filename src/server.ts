@@ -22,6 +22,7 @@ import {
   quoteRoutes,
   genreRoutes,
   notificationRoutes,
+  userRoutes,
 } from 'routes'
 import { getMongoUrl } from 'helpers'
 
@@ -49,6 +50,8 @@ app.use(authMiddleware, quoteRoutes)
 app.use(authMiddleware, genreRoutes)
 
 app.use(authMiddleware, notificationRoutes)
+
+app.use(authMiddleware, userRoutes)
 
 app.use(errorMiddleware)
 
