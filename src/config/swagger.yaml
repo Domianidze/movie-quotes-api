@@ -1833,7 +1833,7 @@ paths:
                     type: string
                     required: true
   /activate-email:
-    post:
+    put:
       tags:
         - User
       security:
@@ -1856,6 +1856,48 @@ paths:
             application/json:
               example:
                 message: Email activated successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: User/Email not found.
+          content:
+            application/json:
+              example:
+                message: User/Email not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+  /set-primary-email:
+    put:
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            example:
+                email: testuser123@gmail.com
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  required: true
+      responses:
+        '200':
+          description: Primary email set successfully!
+          content:
+            application/json:
+              example:
+                message: Primary email set successfully!
               schema:
                 type: object
                 properties:

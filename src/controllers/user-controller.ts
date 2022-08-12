@@ -175,3 +175,44 @@ export const activateEmail = async (
     next(err)
   }
 }
+
+export const setPrimaryEmail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    validateId(req.user.id)
+
+    const user = await User.findById(req.user.id)
+
+    if (!user || user.googleUser) {
+      const error: ErrorType = new Error('User not found.')
+      error.statusCode = 404
+      throw error
+    }
+
+    const foundEmail = user.emails.find((data) => data.email === req.body.email)
+
+    if (!foundEmail || !foundEmail.activated) {
+      const error: ErrorType = new Error('Email not found.')
+      error.statusCode = 404
+      throw error
+    }
+
+    const emails = user.emails.filter((data) => data.email !== foundEmail.email)
+
+    await user.updateOne({
+      $set: {
+        email: foundEmail.email,
+        emails: [{ email: user.email, activated: true }, ...emails],
+      },
+    })
+
+    res.status(200).json({
+      message: 'Primary email set successfully!',
+    })
+  } catch (err) {
+    next(err)
+  }
+}
