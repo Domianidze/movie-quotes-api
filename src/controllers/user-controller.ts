@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 import { User } from 'models'
 import { sendActivateEmail } from 'mail'
 import { validateId, getApiUrl, getDefaultPhoto, removeImage } from 'helpers'
-import { ErrorType } from 'types'
+import { ErrorType, JwtPayloadType } from 'types'
 
 export const getUser = async (
   req: Request,
@@ -124,6 +124,52 @@ export const addEmail = async (
 
     res.status(201).json({
       message: 'Email added successfully!',
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const activateEmail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (!process.env.EMAIL_SECRET) {
+      throw new Error('JWT secret missing.')
+    }
+
+    const { id, email } = jwt.verify(
+      req.body.token,
+      process.env.EMAIL_SECRET
+    ) as JwtPayloadType
+
+    const user = await User.findById(id)
+
+    if (!user || user.googleUser) {
+      const error: ErrorType = new Error('User not found.')
+      error.statusCode = 404
+      throw error
+    }
+
+    const { emails } = user
+    const foundEmail = emails.find((data) => data.email === email)
+
+    if (!foundEmail) {
+      const error: ErrorType = new Error('Email not found.')
+      error.statusCode = 404
+      throw error
+    }
+
+    foundEmail.activated = true
+
+    await user.updateOne({
+      $set: { emails },
+    })
+
+    res.status(200).json({
+      message: 'Email activated successfully!',
     })
   } catch (err) {
     next(err)

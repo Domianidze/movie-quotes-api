@@ -1832,3 +1832,45 @@ paths:
                   message:
                     type: string
                     required: true
+  /activate-email:
+    post:
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            example:
+                token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyZGVjYzZmMjYxMDZhNTEwZWQyNjg0ZSIsImlhdCI6MTY1ODc2ODQ5NSwiZXhwIjoxNjU4NzcyMDk1fQ.x8MHRNLbBOJgHZ1ORLfsAkOUQ1ZhULe4fFk5dCoCnJ4
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  required: true
+      responses:
+        '200':
+          description: Email activated successfully!
+          content:
+            application/json:
+              example:
+                message: Email activated successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: User/Email not found.
+          content:
+            application/json:
+              example:
+                message: User/Email not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
