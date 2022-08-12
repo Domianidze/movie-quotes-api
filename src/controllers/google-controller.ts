@@ -21,6 +21,7 @@ export const googelAuth = async (
         photo: req.body.photo,
         username: req.body.name,
         email: req.body.email,
+        googleAccount: true,
       })
       statusCode = 201
     }

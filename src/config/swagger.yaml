@@ -1717,6 +1717,8 @@ paths:
                   email:
                     type: string
                     required: true
+                  googleAccount:
+                    type: boolean
         '404':
           description: User not found.
           content:
@@ -1729,4 +1731,43 @@ paths:
                   message:
                     type: string
                     required: true
-
+    put:
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                photo:
+                  type: file
+      responses:
+        '200':
+          description: User updated successfully!
+          content:
+            application/json:
+              example:
+                message: User updated successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              example:
+                message: User not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true

@@ -21,6 +21,9 @@ const userSchema = new Schema({
   activated: {
     type: Boolean,
   },
+  googleUser: {
+    type: Boolean,
+  },
 })
 
 const User = mongoose.model('User', userSchema)
