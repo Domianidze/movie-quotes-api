@@ -1,4 +1,6 @@
 import express, { Express } from 'express'
+import { initIo } from 'socket'
+import http from 'http'
 import path from 'path'
 import cors from 'cors'
 import bodyParser from 'body-parser'
@@ -19,36 +21,44 @@ import {
   movieRoutes,
   quoteRoutes,
   genreRoutes,
+  notificationRoutes,
 } from 'routes'
 import { getMongoUrl } from 'helpers'
 
-const server: Express = express()
+const app: Express = express()
 
-server.use(cors())
-server.use(bodyParser.json())
+app.use(cors())
+app.use(bodyParser.json())
 
-server.use(multerMiddleware)
-server.use('/storage', express.static(path.join('storage')))
+app.use(multerMiddleware)
+app.use('/storage', express.static(path.join('storage')))
 
-server.use('/api-docs', SwaggerUI.serve, swaggerMiddleware())
+app.use('/api-docs', SwaggerUI.serve, swaggerMiddleware())
 
-server.use(authRoutes)
+app.use(authRoutes)
 
-server.use('/google', googleRoutes)
+app.use('/google', googleRoutes)
 
-server.use('/password', passwordRecoveryRoutes)
+app.use('/password', passwordRecoveryRoutes)
 
-server.use(authMiddleware, movieRoutes)
+app.use(authMiddleware, movieRoutes)
 
-server.use(authMiddleware, quoteRoutes)
+app.use(authMiddleware, quoteRoutes)
 
-server.use(authMiddleware, genreRoutes)
+app.use(authMiddleware, genreRoutes)
 
-server.use(errorMiddleware)
+app.use(authMiddleware, notificationRoutes)
+
+app.use(errorMiddleware)
 
 const startServer = async () => {
   try {
     await mongoose.connect(getMongoUrl())
+
+    const server = http.createServer(app)
+
+    initIo(server)
+
     server.listen(process.env.SERVER_PORT)
   } catch (err) {
     console.error(err)
