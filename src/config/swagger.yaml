@@ -1744,7 +1744,7 @@ paths:
               properties:
                 username:
                   type: string
-                photo:
+                image:
                   type: file
       responses:
         '200':
