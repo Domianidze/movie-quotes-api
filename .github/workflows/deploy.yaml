@@ -15,7 +15,7 @@ jobs:
                 script_stop: true
                 script: |
                     cd apps
-                    cd folksoul-api-Domianidze
+                    cd movie-quotes-api-Domianidze
                     git pull
                     npm ci
                     npm run build:prod
