@@ -1771,6 +1771,18 @@ paths:
                   message:
                     type: string
                     required: true
+        '409':
+          description: Username already taken.
+          content:
+            application/json:
+              example:
+                message: Username already taken.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
   /email:
     post:
       tags:

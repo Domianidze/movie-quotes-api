@@ -48,6 +48,18 @@ export const editUser = async (
       throw error
     }
 
+    if (req.body.username) {
+      const existingUsername = await User.findOne({
+        username: req.body.username,
+      })
+
+      if (existingUsername) {
+        const error: ErrorType = new Error('Username is already taken.')
+        error.statusCode = 409
+        throw error
+      }
+    }
+
     const photo = req.file
 
     const data = {
