@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken'
 import { User } from 'models'
 import { signUpSchema, logInSchema, sendEmailSchema } from 'schemas'
 import { sendVerifyAccountEmail } from 'mail'
+import { getDefaultPhoto } from 'helpers'
 import { ErrorType, JwtPayloadType } from 'types'
 
 export const signUp = async (
@@ -38,8 +39,10 @@ export const signUp = async (
     const hashedPassword = await bcrypt.hash(req.body.password, 12)
 
     const user = new User({
+      photo: getDefaultPhoto(),
       username: req.body.username,
       email: req.body.email,
+      emails: [],
       password: hashedPassword,
       activated: false,
     })
@@ -133,6 +136,7 @@ export const logIn = async (
     res.status(200).json({
       token,
       id: loadedUser.id.toString(),
+      photo: loadedUser.photo,
       username: loadedUser.username,
       expiresIn,
     })

@@ -15,4 +15,5 @@ export interface ErrorType {
 
 interface JwtPayloadType {
   id?: string
+  email?: string
 }

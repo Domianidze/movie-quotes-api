@@ -3,6 +3,10 @@ import mongoose from 'mongoose'
 const { Schema } = mongoose
 
 const userSchema = new Schema({
+  photo: {
+    type: String,
+    required: true,
+  },
   username: {
     type: String,
     required: true,
@@ -17,6 +21,15 @@ const userSchema = new Schema({
   activated: {
     type: Boolean,
   },
+  googleUser: {
+    type: Boolean,
+  },
+  emails: [
+    {
+      email: String,
+      activated: Boolean,
+    },
+  ],
 })
 
 const User = mongoose.model('User', userSchema)

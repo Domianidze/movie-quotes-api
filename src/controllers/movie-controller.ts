@@ -128,7 +128,7 @@ export const editMovie = async (
       ...(image && { image: `${getApiUrl()}/${image.path}` }),
     }
 
-    await movie.update(data)
+    await movie.updateOne(data)
 
     if (image) {
       removeImage(movie.image)

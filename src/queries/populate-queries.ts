@@ -5,22 +5,22 @@ export const quotePopulateQuery = [
   },
   {
     path: 'createdBy',
-    select: ['username'],
+    select: ['photo', 'username'],
   },
   {
     path: 'likes.likedBy',
-    select: ['username'],
+    select: ['photo', 'username'],
   },
   {
     path: 'comments.commentedBy',
-    select: ['username'],
+    select: ['photo', 'username'],
   },
 ]
 
 export const moviePopulateQuery = [
   {
     path: 'createdBy',
-    select: ['username'],
+    select: ['photo', 'username'],
   },
   {
     path: 'quotes.data',

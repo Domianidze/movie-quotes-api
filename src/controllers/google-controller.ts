@@ -18,8 +18,10 @@ export const googelAuth = async (
 
     if (!user) {
       user = await User.create({
+        photo: req.body.photo,
         username: req.body.name,
         email: req.body.email,
+        googleAccount: true,
       })
       statusCode = 201
     }
@@ -39,8 +41,10 @@ export const googelAuth = async (
     )
 
     res.status(statusCode).json({
-      token,
       id: user.id.toString(),
+      photo: user.photo,
+      username: user.username,
+      token,
     })
   } catch (err) {
     next(err)

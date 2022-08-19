@@ -22,6 +22,7 @@ import {
   quoteRoutes,
   genreRoutes,
   notificationRoutes,
+  userRoutes,
 } from 'routes'
 import { getMongoUrl } from 'helpers'
 
@@ -31,6 +32,7 @@ app.use(cors())
 app.use(bodyParser.json())
 
 app.use(multerMiddleware)
+app.use('/public', express.static(path.join('public')))
 app.use('/storage', express.static(path.join('storage')))
 
 app.use('/api-docs', SwaggerUI.serve, swaggerMiddleware())
@@ -48,6 +50,8 @@ app.use(authMiddleware, quoteRoutes)
 app.use(authMiddleware, genreRoutes)
 
 app.use(authMiddleware, notificationRoutes)
+
+app.use(authMiddleware, userRoutes)
 
 app.use(errorMiddleware)
 

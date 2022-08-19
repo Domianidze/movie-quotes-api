@@ -286,11 +286,15 @@ paths:
         content:
           application/json:
             example:
+                photo: 'https://t4.ftcdn.net/jpg/03/46/93/61/360_F_346936114_RaxE6OQogebgAWTalE1myseY1Hbb5qPM.jpg'
                 name: testuser
                 email: testuser@gmail.com
             schema:
               type: object
               properties:
+                photo:
+                  type: string
+                  required: true
                 name:
                   type: string
                   required: true
@@ -1682,4 +1686,328 @@ paths:
                   message:
                     type: string
                     required: true
-
+  /user:
+    get:
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Get user successfully!
+          content:
+            application/json:
+              example:
+                  _id: 62a86e06451633b832d24238
+                  photo: http://localhost:8080/public/img/default-photo.png
+                  username: testuser
+                  email: testuser@gmail.com
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    required: true
+                  photo:
+                    type: string
+                    required: true
+                  username:
+                    type: string
+                    required: true
+                  email:
+                    type: string
+                    required: true
+                  googleAccount:
+                    type: boolean
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              example:
+                message: User not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+    put:
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                image:
+                  type: file
+      responses:
+        '200':
+          description: User updated successfully!
+          content:
+            application/json:
+              example:
+                message: User updated successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              example:
+                message: User not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '409':
+          description: Username already taken.
+          content:
+            application/json:
+              example:
+                message: Username already taken.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+  /email:
+    post:
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            example:
+                email: testuser@gmail.com
+                redirectOnConfirm: http://localhost:3000/activate-email
+                language: en
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  required: true
+                redirectOnConfirm:
+                  type: string
+                  required: true
+                language:
+                  type: string
+      responses:
+        '201':
+          description: Email added successfully!
+          content:
+            application/json:
+              example:
+                message: Email added successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              example:
+                message: User not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '422':
+          description: Email is already taken.
+          content:
+            application/json:
+              example:
+                message: Email is already taken.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+    delete:
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            example:
+                email: testuser123@gmail.com
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  required: true
+      responses:
+        '200':
+          description: Email deleted successfully!
+          content:
+            application/json:
+              example:
+                message: Email deleted successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              example:
+                message: User not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+  /activate-email:
+    put:
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            example:
+                token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyZGVjYzZmMjYxMDZhNTEwZWQyNjg0ZSIsImlhdCI6MTY1ODc2ODQ5NSwiZXhwIjoxNjU4NzcyMDk1fQ.x8MHRNLbBOJgHZ1ORLfsAkOUQ1ZhULe4fFk5dCoCnJ4
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  required: true
+      responses:
+        '200':
+          description: Email activated successfully!
+          content:
+            application/json:
+              example:
+                message: Email activated successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: User/Email not found.
+          content:
+            application/json:
+              example:
+                message: User/Email not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+  /set-primary-email:
+    put:
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            example:
+                email: testuser123@gmail.com
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  required: true
+      responses:
+        '200':
+          description: Primary email set successfully!
+          content:
+            application/json:
+              example:
+                message: Primary email set successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: User/Email not found.
+          content:
+            application/json:
+              example:
+                message: User/Email not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+  /password:
+    put:
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            example:
+                password: testuser456
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  required: true
+      responses:
+        '200':
+          description: Password edited successfully!
+          content:
+            application/json:
+              example:
+                message: Password edited successfully!
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              example:
+                message: User not found.
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
