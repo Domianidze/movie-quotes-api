@@ -7,7 +7,7 @@ export default Joi.object({
   nameGe: Joi.string()
     .regex(/^[ა-ჰ0-9 -.,!?'„“():/]*$/)
     .required(),
-  genres: Joi.string().required(),
+  genres: Joi.string(),
   directorEn: Joi.string()
     .regex(/^[a-zA-Z0-9 -.,!?'„“():/]*$/)
     .required(),
@@ -15,9 +15,9 @@ export default Joi.object({
     .regex(/^[ა-ჰ0-9 -.,!?'„“():/]*$/)
     .required(),
   descriptionEn: Joi.string()
-    .regex(/^[a-zA-Z0-9 -.,!?'„“():/]*$/)
+    .regex(/^[a-zA-Z0-9 -.,!?'„“():/\s\s+]*$/)
     .required(),
   descriptionGe: Joi.string()
-    .regex(/^[ა-ჰ0-9 -.,!?'„“():/]*$/)
+    .regex(/^[ა-ჰ0-9 -.,!?'„“():/\s\s+]*$/)
     .required(),
 })

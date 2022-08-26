@@ -4,10 +4,10 @@ info:
   version: 1.0.0
 
 servers:
+  - url: https://movie-quotes-api.sandro.redberryinternship.ge/
+    description: production server
   - url: http://localhost:8080
     description: local server
-  - url: 
-    description: production server
 components:
   securitySchemes:
     bearerAuth:
