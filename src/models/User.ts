@@ -21,7 +21,7 @@ const userSchema = new Schema({
   activated: {
     type: Boolean,
   },
-  googleUser: {
+  googleAccount: {
     type: Boolean,
   },
   emails: [
