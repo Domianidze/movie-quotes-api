@@ -17,9 +17,18 @@ export const searchQuotes = async (
 ) => {
   try {
     const { query } = req.params
+    let regex: RegExp
+
+    if (query.startsWith('@') || query.startsWith('&')) {
+      regex = new RegExp(query.slice(1), 'i')
+    } else {
+      regex = new RegExp(query, 'i')
+    }
 
     const findByQuotes = async () => {
-      const data = await Quote.find({ $text: { $search: query } })
+      const data = await Quote.find({
+        $or: [{ quoteEn: { $regex: regex } }, { quoteGe: { $regex: regex } }],
+      })
         .select('-__v')
         .populate(quotePopulateQuery)
         .sort({ _id: -1 })
@@ -28,7 +37,9 @@ export const searchQuotes = async (
     }
 
     const findByMovies = async () => {
-      const movies = await Movie.find({ $text: { $search: query } })
+      const movies = await Movie.find({
+        $or: [{ nameEn: { $regex: regex } }, { nameGe: { $regex: regex } }],
+      })
 
       const movieIds: string[] = movies.map((movie) => movie._id.toString())
 
@@ -43,11 +54,11 @@ export const searchQuotes = async (
     let quotes
 
     if (query.startsWith('@')) {
-      quotes = await findByQuotes()
+      quotes = await findByMovies()
     }
 
     if (query.startsWith('&')) {
-      quotes = await findByMovies()
+      quotes = await findByQuotes()
     }
 
     if (!quotes) {
