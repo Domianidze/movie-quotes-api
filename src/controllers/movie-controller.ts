@@ -168,11 +168,11 @@ export const deleteMovie = async (
       throw error
     }
 
+    await Quote.deleteMany({ movie: movie._id })
+
     await movie.remove()
 
     removeImage(movie.image)
-
-    Quote.deleteMany({ movie: movie._id })
 
     res.status(200).json({
       message: 'Movie deleted successfully!',
