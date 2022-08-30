@@ -42,9 +42,10 @@ export const signUp = async (
       photo: getDefaultPhoto(),
       username: req.body.username,
       email: req.body.email,
-      emails: [],
       password: hashedPassword,
       activated: false,
+      googleAccount: false,
+      emails: [],
     })
 
     const response = await user.save()

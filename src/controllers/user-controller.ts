@@ -107,7 +107,7 @@ export const addEmail = async (
 
     const user = await User.findById(req.user.id)
 
-    if (!user || user.googleUser) {
+    if (!user || user.googleAccount) {
       const error: ErrorType = new Error('User not found.')
       error.statusCode = 404
       throw error
@@ -165,7 +165,7 @@ export const activateEmail = async (
 
     const user = await User.findById(id)
 
-    if (!user || user.googleUser) {
+    if (!user || user.googleAccount) {
       const error: ErrorType = new Error('User not found.')
       error.statusCode = 404
       throw error
@@ -204,7 +204,7 @@ export const setPrimaryEmail = async (
 
     const user = await User.findById(req.user.id)
 
-    if (!user || user.googleUser) {
+    if (!user || user.googleAccount) {
       const error: ErrorType = new Error('User not found.')
       error.statusCode = 404
       throw error
@@ -245,7 +245,7 @@ export const deleteEmail = async (
 
     const user = await User.findById(req.user.id)
 
-    if (!user || user.googleUser) {
+    if (!user || user.googleAccount) {
       const error: ErrorType = new Error('User not found.')
       error.statusCode = 404
       throw error
@@ -279,7 +279,7 @@ export const changePassword = async (
 
     const user = await User.findById(req.user.id)
 
-    if (!user || user.googleUser) {
+    if (!user || user.googleAccount) {
       const error: ErrorType = new Error('User not found.')
       error.statusCode = 404
       throw error
