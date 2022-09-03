@@ -26,9 +26,9 @@ export const signUp = async (
       throw error
     }
 
-    const existingEmail = await User.findOne({
-      email: req.body.email,
-    })
+    const existingEmail =
+      (await User.findOne({ email: req.body.email })) ||
+      (await User.findOne({ 'emails.email': req.body.email }))
 
     if (existingEmail) {
       const error: ErrorType = new Error('Email is already taken.')
